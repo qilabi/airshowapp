@@ -18,11 +18,8 @@ using System.Web.Mvc;
 
 namespace Senparc.Weixin.MP.Sample.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class BaseController : Controller
-    {
+    //public class BaseController : Controller
+    //{
 
-    }
+    //}
 }
