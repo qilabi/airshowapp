@@ -18,9 +18,9 @@ using System.Web.Mvc;
 
 namespace Senparc.Weixin.MP.Sample.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
+   /// <summary>
+   /// hello
+   /// </summary>
     public class BaseController : Controller
     {
 
