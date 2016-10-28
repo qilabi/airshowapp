@@ -37,6 +37,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             if (Session["OAuthAccessToken"] == null)
             {
                 Session["OAuthAccessToken"] = token;
+
             }
             else
             {

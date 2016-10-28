@@ -24,6 +24,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
     {
         //
         // GET: /Menu/
+         
 
         public ActionResult Index()
         {
