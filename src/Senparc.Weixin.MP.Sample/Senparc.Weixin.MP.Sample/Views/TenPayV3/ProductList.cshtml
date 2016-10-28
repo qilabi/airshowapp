@@ -1,0 +1,54 @@
+﻿@model List<Senparc.Weixin.MP.Sample.Models.ProductModel>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>2016珠海航展第十一届官方门票价格_预订_地址-奇比拉</title>
+    <script language="javascript" src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link href="http://www.sdylife.com/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        ul#productList, ul#productList li {
+            list-style: none;
+            display: inline;
+        }
+
+            #productList .col-md-6 {
+                overflow: hidden; 
+            }
+
+                ul#productList .col-md-6.br {
+                    clear: left;
+                }
+
+                ul#productList .col-md-6 a {
+                    text-decoration: none; 
+                }
+                .m10{margin:10px;}
+                .mb15{ margin-bottom:15px;}
+    </style>
+</head>
+<body>
+    <div class="container content">
+        <div id="productList" class="row">
+            @for (int i = 0; i <= Model.Count - 1; i++)
+            {
+                var item = Model[i];
+                <div class="@(i > 0 && i % 4==0 ? "br" : null) col-xs-12 col-md-6 mb15">
+                    <a class="btn btn-success button col-xs-12" href="@Url.Action("ProductItem", "TenPayV3", new {productId = item.Id, hc = item.GetHashCode()})">
+                        <div class="">
+                            <h2>@item.Name</h2>
+                            <p>@item.Price.ToString("c")</p>
+                            <p>点击购买</p>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
