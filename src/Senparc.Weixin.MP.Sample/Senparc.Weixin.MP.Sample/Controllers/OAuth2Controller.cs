@@ -107,7 +107,6 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
             string openId;
             OAuthAccessTokenResult result = null;
-
             #region 解決 Auth 出現 40028(Invalid code)錯誤
             try
             {
