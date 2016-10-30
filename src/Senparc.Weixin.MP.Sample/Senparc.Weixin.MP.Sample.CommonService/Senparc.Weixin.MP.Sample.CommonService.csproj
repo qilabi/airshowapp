@@ -51,6 +51,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Senparc.Weixin, Version=4.8.0.32728, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Senparc.Weixin.MP.BuildOutPut\Senparc.Weixin.dll</HintPath>
@@ -58,7 +62,28 @@
     <Reference Include="Senparc.Weixin.QY">
       <HintPath>..\..\Senparc.Weixin.MP.BuildOutPut\Senparc.Weixin.QY.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Common, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Common.4.5.4\lib\net45\ServiceStack.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Interfaces.4.5.4\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.OrmLite.4.5.4\lib\net45\ServiceStack.OrmLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite.SqlServer, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.4.5.4\lib\net45\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -67,6 +92,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Models\BaseModels.cs" />
+    <Compile Include="Data\Models\Entity.cs" />
+    <Compile Include="Data\Models\IEntity.cs" />
+    <Compile Include="Data\Models\UserIdentity.cs" />
+    <Compile Include="Data\SavedEventArgs.cs" />
     <Compile Include="Download\CodeRecord.cs" />
     <Compile Include="Download\Config.cs" />
     <Compile Include="Download\ConfigHelper.cs" />
@@ -78,6 +108,7 @@
     <Compile Include="MessageHandlers\OpenMessageHandler\OpenCheckMessageHandler.cs" />
     <Compile Include="MessageHandlers\QyMessageHandler\QyCustomMessageContext.cs" />
     <Compile Include="MessageHandlers\QyMessageHandler\QyCustomMessageHandler.cs" />
+    <Compile Include="Data\MSSQLProvider.cs" />
     <Compile Include="OpenTicket\OpenTicketHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MessageHandlers\CustomThirdPartyMessageHandlers\CustomThirdPartyMessageHandler.cs" />
@@ -98,6 +129,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Download\readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
