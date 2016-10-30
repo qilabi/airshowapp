@@ -145,6 +145,10 @@
                 }
             }
         });
+                $scope.$watch('identityInfo.realName', function(newValue, oldValue, scope) {
+                    console.log( "scopt:"+newValue);
+                });
+        
         //++
         $scope.ticket.incrReplyQty = function(){
                 $scope.ticket.qty ++;

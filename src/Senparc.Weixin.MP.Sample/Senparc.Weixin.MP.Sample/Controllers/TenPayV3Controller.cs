@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using Senparc.Weixin.Exceptions;
 using Castle.Core.Logging;
 using Newtonsoft.Json;
+using Senparc.Weixin.MP.Sample.CommonService.Data.Application;
 using Senparc.Weixin.MP.Sample.CommonService.Data.Models;
 
 namespace Senparc.Weixin.MP.Sample.Controllers
@@ -75,11 +76,11 @@ namespace Senparc.Weixin.MP.Sample.Controllers
         /// 获取用户的OpenId
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index(int productId = 0, int hc = 0, string orderNo ="")
+        public ActionResult Index(int productId = 0, int hc = 0, string orderNo = "")
         {
             var returnUrl = string.Format("http://www.soyotu.com/TenPayV3/JsApi");
             var state = string.Format("{0}|{1}|{2}", productId, hc, orderNo);
-            var url = OAuthApi.GetAuthorizeUrl(TenPayV3Info.AppId, returnUrl, state, OAuthScope.snsapi_base); 
+            var url = OAuthApi.GetAuthorizeUrl(TenPayV3Info.AppId, returnUrl, state, OAuthScope.snsapi_base);
             return Redirect(url);
         }
 
@@ -96,17 +97,19 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             {
                 //錯誤
             }
-            var nameArr = order.realNames.Split(new char[1] {','}, StringSplitOptions.RemoveEmptyEntries);
-            var identityNoArr = order.replies.Split(new char[1] {','}, StringSplitOptions.RemoveEmptyEntries);
+            var nameArr = order.realNames.Split(new char[1] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var identityNoArr = order.replies.Split(new char[1] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             if (nameArr.Length != identityNoArr.Length || identityNoArr.Length != order.Quantity)
             {
                 //
             }
             for (int i = 0; i < order.Quantity; i++)
             {
-               // order.realNames
+                OrdersService ordersService = new OrdersService();
+                ordersService.CreateOrder(order);
+                // order.realNames
             }
-            var newOrderNo  = DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
+            var newOrderNo = DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
             var builder = new StringBuilder();
             builder.AppendLine("==================PayIt===================");
             builder.Append("create new order number :" + newOrderNo + " ; telelphone:" + order.telephone + " ;hc:" +
@@ -150,7 +153,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             var stateData = state.Split('|');
             int productId = 0;
 
-            
+
             //return Content(string.Format("已經到這裡 {0}:{1}", stateData[0], stateData[1]));
             ProductModel product = null;
 
@@ -160,7 +163,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                 if (int.TryParse(stateData[1], out hc))
                 {
                     //builder.Append(" hc:" + hc.ToString());
-                    
+
                     var products = ProductModel.GetFakeProductList();
                     product = products.FirstOrDefault(z => z.Id == productId);
 
@@ -253,18 +256,18 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             string nonceStr = "";
             string paySign = "";
 
-             
+
             string sp_billno = stateData[2].ToString(); //订单
-           
+
             string date = DateTime.Now.ToString("yyyyMMdd");
-             
+
             try
             {
                 var ref1 = JsonConvert.SerializeObject(TenPayV3Info);
-                
+
                 builder.AppendLine("TenPayV3Info:" + ref1);
 
-                
+
 
                 //创建支付应答对象
                 RequestHandler packageReqHandler = new RequestHandler(null);
@@ -346,7 +349,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                 //这里的state其实是会暴露给客户端的，验证能力很弱，这里只是演示一下
                 //实际上可以存任何想传递的数据，比如用户ID，并且需要结合例如下面的Session["OAuthAccessToken"]进行验证
                 return Content("验证失败！请从正规途径进入！1001");
-            } 
+            }
 
             //获取产品信息
             var stateData = state.Split('|');
@@ -371,7 +374,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                 }
             }
             var identityNo = state[2];  //身份证号码
-            
+
             string openId;
             OAuthAccessTokenResult openIdResult = null;
             #region 解決 Auth 出現 40028(Invalid code)錯誤
@@ -443,7 +446,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                 return Content("授权过程发生错误：" + ex.Message);
             }
             #endregion
- 
+
 
             string timeStamp = "";
             string nonceStr = "";
@@ -568,20 +571,20 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             var nonceStr = TenPayV3Util.GetNoncestr();
 
             //创建请求统一订单接口参数
-            packageReqHandler.SetParameter("appid", TenPayV3Info.AppId);	
-            packageReqHandler.SetParameter("mch_id", TenPayV3Info.MchId);	
-            packageReqHandler.SetParameter("nonce_str", nonceStr);          
-            packageReqHandler.SetParameter("body", "test");    
-            packageReqHandler.SetParameter("out_trade_no", sp_billno);		
-            packageReqHandler.SetParameter("total_fee", "1");			    
+            packageReqHandler.SetParameter("appid", TenPayV3Info.AppId);
+            packageReqHandler.SetParameter("mch_id", TenPayV3Info.MchId);
+            packageReqHandler.SetParameter("nonce_str", nonceStr);
+            packageReqHandler.SetParameter("body", "test");
+            packageReqHandler.SetParameter("out_trade_no", sp_billno);
+            packageReqHandler.SetParameter("total_fee", "1");
             packageReqHandler.SetParameter("spbill_create_ip", Request.UserHostAddress);
             packageReqHandler.SetParameter("notify_url", TenPayV3Info.TenPayV3Notify);
             packageReqHandler.SetParameter("trade_type", TenPayV3Type.NATIVE.ToString());
-            packageReqHandler.SetParameter("openid", openId);	                    
+            packageReqHandler.SetParameter("openid", openId);
             packageReqHandler.SetParameter("product_id", productId);
 
             string sign = packageReqHandler.CreateMd5Sign("key", TenPayV3Info.Key);
-            packageReqHandler.SetParameter("sign", sign);	                    
+            packageReqHandler.SetParameter("sign", sign);
 
             string data = packageReqHandler.ParseXML();
 
@@ -700,7 +703,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
         public ActionResult PayNotifyUrl()
         {
             ResponseHandler resHandler = new ResponseHandler(null);
-            
+
             string return_code = resHandler.GetParameter("return_code");
             string return_msg = resHandler.GetParameter("return_msg");
 
@@ -734,7 +737,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             builder.AppendLine("xml:" + xml);
             builder.AppendLine("return_code:" + return_code);
             builder.AppendLine("return_msg:" + return_msg);
-            
+
             builder.AppendLine("==============PayNotifyUrl=================");
             this._logger.Info(builder.ToString());
             return Content(xml, "text/xml");
@@ -1062,7 +1065,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             if (BroswerUtility.SideInWeixinBroswer(HttpContext))
             {
                 //正在微信端，直接跳转到微信支付页面
-                return RedirectToAction("Index", new {productId = productId, hc = hc, orderNo = "360735199012151414"});
+                return RedirectToAction("Index", new { productId = productId, hc = hc, orderNo = "360735199012151414" });
             }
             else
             {
@@ -1079,7 +1082,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
         public ActionResult SubmitOrder(int productId, int hc)
         {
             var orderNo = "360735199012151414";
-            return RedirectToAction("Index", new {productId = productId, hc = hc, orderNo = orderNo});
+            return RedirectToAction("Index", new { productId = productId, hc = hc, orderNo = orderNo });
         }
 
         /// <summary>
