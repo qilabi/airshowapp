@@ -92,14 +92,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Contracts\IBaseRepository.cs" />
+    <Compile Include="Data\Contracts\IOrdersRepository.cs" />
     <Compile Include="Data\Models\BaseModels.cs" />
     <Compile Include="Data\Models\Entity.cs" />
     <Compile Include="Data\Models\IEntity.cs" />
-    <Compile Include="Data\Models\orders.cs" />
+    <Compile Include="Data\Models\Orders.cs" />
     <Compile Include="Data\Models\order_config.cs" />
     <Compile Include="Data\Models\order_goods.cs" />
     <Compile Include="Data\Models\UserIdentity.cs" />
+    <Compile Include="Data\Repository\BaseRepository.cs" />
+    <Compile Include="Data\Repository\OrdersRepository.cs" />
     <Compile Include="Data\SavedEventArgs.cs" />
+    <Compile Include="Data\Utils.cs" />
     <Compile Include="Download\CodeRecord.cs" />
     <Compile Include="Download\Config.cs" />
     <Compile Include="Download\ConfigHelper.cs" />

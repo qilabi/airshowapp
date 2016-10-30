@@ -9,12 +9,15 @@ namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
     /// </summary>
     [Serializable]
     [Alias("dt_orders")]
-    public  class orders
+    public  class Orders:Entity<int>
     {
-        public orders()
-        { }
+        public Orders()
+        {
+            order_no =Utils.GetOrderNumber();
+            payment_status = 1;
+
+        }
         #region Model
-        private int _id;
         private string _order_no = "";
         private string _trade_no = "";
         private int _user_id = 0;
@@ -66,14 +69,7 @@ namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
             set { _articleid = value; }
             get { return _articleid; }
         }
-        /// <summary>
-        /// ×ÔÔöID
-        /// </summary>
-        public int id
-        {
-            set { _id = value; }
-            get { return _id; }
-        }
+
         /// <summary>
         /// ¶©µ¥ºÅ
         /// </summary>
