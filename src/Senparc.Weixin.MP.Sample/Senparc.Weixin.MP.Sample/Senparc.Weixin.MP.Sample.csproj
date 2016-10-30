@@ -230,6 +230,7 @@
     <Content Include="assets\images\score-bg_884086eb.png" />
     <Content Include="assets\images\score-on.png" />
     <Content Include="assets\images\success_icon.png" />
+    <Content Include="assets\images\timg.gif" />
     <Content Include="assets\images\topup_bg1.png" />
     <Content Include="assets\images\unactive.png" />
     <Content Include="assets\images\weixin.png" />
@@ -316,6 +317,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\timg.gif" />
     <Content Include="log4net.config" />
     <Content Include="assets\fonts\ratchicons.eot" />
     <Content Include="assets\fonts\ratchicons.ttf" />
@@ -416,6 +418,9 @@
     <Content Include="Views\Cache\Test.cshtml" />
     <Content Include="Views\Document\Index.cshtml" />
     <Content Include="Views\OAuth2\Login.cshtml" />
+    <Content Include="Views\TenPayV3\PaymentStatus.cshtml" />
+    <Content Include="Views\Shared\_Loading.cshtml" />
+    <Content Include="Views\Shared\_BottomNav.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Document\Files\" />

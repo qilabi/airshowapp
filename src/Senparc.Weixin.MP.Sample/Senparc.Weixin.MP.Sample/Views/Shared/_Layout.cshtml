@@ -2,18 +2,21 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>珠海奇比拉科技有限公司</title>
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
-    @Styles.Render("~/Content/css")
-    <link href="~/Content/darktooltip.min.css" rel="stylesheet" />
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    <script src="~/Content/danktooltip/js/jquery.darktooltip.min.js"></script>
- 
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link href="/assets/styles/sm.min.css" rel="stylesheet" />
+    <link href="/assets/styles/sm-extend.min.css" rel="stylesheet" />
+    <link href="/assets/styles/airshow.css" rel="stylesheet" />
 </head>
 <body>
-    珠海奇比拉科技有限公司
+    @RenderBody()
+    <script src="/assets/js/zepto.min.js"></script>
+    <script src="/assets/js/sm.min.js"></script>
+    <script src="/assets/js/sm-extend.min.js"></script>
+    @RenderSection("scripts", required: false)
 </body>
 </html>

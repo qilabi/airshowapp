@@ -8,12 +8,13 @@ namespace Senparc.Weixin.MP.Sample
         // 有关 Bundling 的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/jquery.form.js",
-                        "~/Scripts/tongji.js"//官网用
+            bundles.Add(new ScriptBundle("~/bundles/sm").Include(
+                        "~/assets/js/zepto.min.js",
+                        "~/assets/js/sm.min.js",
+                        "~/assets/js/sm-extend.min.js"//官网用
                          ));
 
+           
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js"));
 
@@ -27,8 +28,14 @@ namespace Senparc.Weixin.MP.Sample
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/reset.css",
-                "~/Content/style.css"
+                "~/assets/styles/style.css",
+                "~/assets/styles/reset.css"
+                ));
+ 
+             bundles.Add(new StyleBundle("~/Content/order").Include(
+                "~/assets/styles/sm.min.css",
+                "~/assets/styles/sm-extend.min.css",
+                "~/assets/styles/airshow.css"
                 ));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(

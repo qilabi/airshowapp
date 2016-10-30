@@ -13,6 +13,7 @@ namespace Senparc.Weixin.MP.Sample.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
+        public decimal RealPrice { get; set; }
         public string ImgPath { get; set; }
         public string Desc { get; set; }
 
@@ -20,11 +21,12 @@ namespace Senparc.Weixin.MP.Sample.Models
         {
         }
 
-        public ProductModel(int id, string name, decimal price)
+        public ProductModel(int id, string name, decimal price,decimal realPrice)
         {
             Id = id;
             Name = name;
             Price = price;
+            RealPrice = realPrice;
         }
 
 
@@ -34,8 +36,8 @@ namespace Senparc.Weixin.MP.Sample.Models
         {
             var list = ProductList ?? new List<ProductModel>()
             {
-                new ProductModel(1,"航展成人票(电子票)",(decimal)2.00),
-                new ProductModel(2,"航展老人儿童学生(电子票)",(decimal)1.00),
+                new ProductModel(1,"成人票(电子票)",(decimal)500.00,(decimal)1.00),
+                new ProductModel(2,"老人儿童学生(电子票)",(decimal)300.00,(decimal)3.00),
       
             };
             ProductList = ProductList ?? list;

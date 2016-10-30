@@ -4,15 +4,10 @@ list-style: none;
 header.bar {
     background: #dc3c38;
 }
-.clearfix:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0;
-}
 
+body, input, select, textarea {
+    font: 12px/1.5 microsoft yahei, Arial, Helvetica, sans-serif;
+}
 header .title {
     color: #fff;
 }
@@ -231,7 +226,7 @@ img {
     background-color: #fff;
 }
 .dest-tickets .title-icon {
-    background: url(../assets/images/icon-ticket.png) no-repeat;
+    background: url(/assets/images/icon-ticket.png) no-repeat;
     background-size: 42px;
 }
 .title-icon {
@@ -298,6 +293,7 @@ img {
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
+    color: #3d4145;
 }
 .dest-tickets .tips {
     color: #60a9f5;
@@ -478,6 +474,9 @@ img {
 .order-infor{
     font-size: 14px;
 }
+.order-infor input{
+    border: 0px;
+}
 .order-infor .bd {
     padding: 0 0 60px;
 }
@@ -572,7 +571,7 @@ img {
     float: right;
     margin: 10px 0 0;
 }
-.order-infor .ft .submit a {
+.order-infor .ft .submit .ordersubmit {
     display: block;
     width: 89px;
     height: 35px;
@@ -582,4 +581,8 @@ img {
     color: #fff;
     border-radius: 4px;
     background: #f55925;
+}
+.order-infor .ft .submit .ordersubmit[disabled] {
+   
+    background: #999;
 }

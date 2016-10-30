@@ -1,44 +1,255 @@
-﻿@model List<Senparc.Weixin.MP.Sample.Models.ProductModel>
-@{
-    Layout = null;
+﻿@{
+    ViewBag.Title = "第十一届中国国际航空航天博览会";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>2016珠海航展第十一届官方门票价格_预订_地址-奇比拉</title>
-    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <link href="http://www.sdylife.com/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-        ul#productList, ul#productList li {
-            list-style: none;
-            display: inline;
-        }
+<div class="page">
+    <header class="bar bar-nav">
+        <h1 class="title">第十一届中国国际航空航天博览会</h1>
+    </header>
+    <nav class="bar bar-tab">
+        <a class="tab-item" href="#">
+            <span class="icon icon-home"></span>
+            <span class="tab-label">主页</span>
+        </a>
+        <a class="tab-item" href="#">
+            <span class="icon icon-me"></span>
+            <span class="tab-label">会员</span>
+        </a>
+        <a class="tab-item" href="#">
+            <span class="icon icon-cart"></span>
+            <span class="tab-label">订票</span>
+        </a>
+        <a class="tab-item" href="#">
+            <span class="icon icon-settings"></span>
+            <span class="tab-label">指南</span>
+        </a>
+        <a class="tab-item" href="#">
+            <span class="icon icon-phone"></span>
+            <span class="tab-label">电话</span>
+        </a>
+    </nav>
+    <div class="content">
+        <section class="dest-captain">
+            <div class="headimg">
+                <img src="~/assets/images/1.jpg" />
+                <div class="info-img-mask" data-ek="sliderimg"></div>
+                <div id="J_dest-name-wrap-point">
+                    <div class="dest-name-wrap">
+                        <h1 class="dest-name">
+                            珠海航展<span class="office-head-wrap"></span>
+                            <div class="clearfix"><span class="weather-tip" data-ek="weatherBtn"></span></div>
+                        </h1><span class="dest-rank">珠海景点排名第<span>2</span>名</span><div class="score-wrap clearfix" data-ek="commonBtn">
+                            <div class="stars-wrap fl">
+                                <div class="stars-bg"><span></span><span></span><span></span><span></span><span></span></div>
+                                <div class="stars-score" style="width: 80px;"><span></span><span></span><span></span><span></span><span></span></div>
+                            </div><span class="comment-num">1725条评论</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-            #productList .col-md-6 {
-                overflow: hidden; 
+        <div class="dest-top-intro border-top border-bottom">
+            <div class="dest-wrap">
+                <div class="intro-item" data-ek="topIntroBtn" data-tid="desc">
+                    <span>简介</span><p>珠海航展，世界5大航展之一</p><span class="intro-item-more"></span>
+                </div>
+                <div class="intro-item" data-ek="topIntroBtn" data-tid="address">
+                    <span>地址</span>
+                    <p>珠海市金湾区机场路珠海国际航展中心<span class="intro-item-addr"></span></p>
+                </div>
+                <div class="intro-item" data-ek="topIntroBtn" data-tid="opening_hours">
+                    <span>公众日时间</span><p>11月4号--6号09:00~17:00</p><span class="intro-item-more"></span>
+                </div>
+                <div class="intro-item" data-ek="topIntroBtn" data-tid="arrival">
+                    <span>乘车指南</span><p>公交，航展专线， 自驾，出租车均可达</p>
+                    <p></p><span class="intro-item-more"></span>
+                </div>
+            </div>
+            <div class="share-btn-wrap row" id="J_view-tips">
+                <div class="col-33">&nbsp;</div>
+                <div class="button  button-success col-33 btn-tips">小贴士</div>
+                <div class="col-33">&nbsp;</div>
+
+            </div>
+        </div>
+        <section class="dest-tickets border-top border-bottom">
+            <div class="scener-ticket-title">
+                <span class="title-icon"></span>
+                <h2 class="tc">门票预订</h2>
+                <span class="sub-title">珠海航展【二代电子身份证票】</span>
+                <div class="arrow-wrap"><span class="arrow-right"></span></div>
+            </div>
+            <div class="dest-wrap clearfix">
+                @for (int i = 0; i <= Model.Count - 1; i++)
+                {
+
+                    var item = Model[i];
+
+                    <div class="ticket-item clearfix">
+                        <div class="ticket-left" data-remarkurl="/business/ajax/ticket/gettickettip?map_ticket_id=914610fd88813cb716c8f6d6" data-tid="0" data-tlink="" data-ek="noticeBtn">
+                            <h1>珠海航展电子成人票（11.4-11.6）</h1>
+                            <div class="tips"><span>当天20：00前</span></div><span class="book-notice">预订须知</span>
+                        </div>
+                        <a href="@Url.Action("ProductItem", "TenPayV3", new {productId = item.Id, hc = item.GetHashCode()})">
+                            <div class="ticket-right" data-ek="bookingBtn" data-tlink="" data-tid="0">
+                                <div class="ticket-price">@item.RealPrice.ToString("c")</div>
+                                <div class="ticket-origin-price">原价:@item.RealPrice.ToString("c") </div>
+                                <div class="ticket-book">预订</div>
+                                <div class="ticket-pay-type">在线支付</div>
+                            </div>
+                        </a>
+                    </div>
+
+                }
+
+
+
+            </div>
+        </section>
+
+        <div class="list-content" style="display: none">
+            <h4>
+                小贴士
+            </h4>
+            <h5>
+                【景点亮点】
+            </h5>
+            <p>
+                展览形式取得新突破 首增地面装备动态演示
+            </p>
+            <p>
+                中外飞行表演队联袂登场 飞行表演更加精彩
+            </p>
+            <p>
+                军政贸易代表团增多 专业活动规格档次更高
+            </p>
+
+            <h5>
+                【安检须知】
+            </h5>
+            <p>
+                一、禁带物品清单：
+                1、枪支弹药、爆炸物品。
+                2、仿真枪、管制刀具（如匕首、三棱刀、带自锁装置的弹簧刀）
+                3、易燃易爆物品（如烟花爆竹、汽油、酒精、丁烷气）
+                4、剧毒、腐蚀性（如硫酸、硝酸）等危险化学品及放射性物品
+                5、有害生物制剂、传染病病原体等危险物品
+                6、海洛因、可卡因、大麻、冰毒等各类毒品
+                7、中国法律法规明令禁止的其它物品入场
+            </p>
+            <p>
+                二、限带物品清单
+                1、动物（导盲犬等服务类动物除外）
+                2、自带的瓶装水、罐装饮料和酒精类等硬包装饮料、含酒精饮品，以及超过个人使用量的易投掷食品（如大量水果和鸡蛋等）
+                3、整箱日用品或礼品、体积较大的箱包、手提袋等
+                4、无线电遥控玩具、遥控航模、风筝、包装玩具等
+                5、横幅、标语、广告牌、传单等宣传物品
+                6、易碎品和各类玻璃容器
+                7、长度超过50公分的棒、棍、尖锐物等
+                8、其它有可能影响安全的物品，如打火机、火柴等点火器具、注射器、药剂等
+            </p>
+        </div>
+        <div class="ticket-list-more " style="opacity: 0;">
+            <div class="ticket-list-moreinfo">
+                <dl class="clearfix row">
+                    <dt class="col-20">预订时间</dt>
+                    <dd class="col-80">
+                        您最晚要在当天15:00前下单，请尽早预订，以免耽误行程
+                    </dd>
+                </dl>
+                <dl class="clearfix row">
+                    <dt class="col-20">费用包含</dt>
+                    <dd class="col-80">
+                        第十一届中国国际航空航天博览会（珠海航展）成人电子票 1张
+                    </dd>
+                </dl>
+                <dl class="clearfix row">
+                    <dt class="col-20">适用人群</dt>
+                    <dd class="col-80">
+                        内地持有二代身份证的参观客人，电子实名制提前订票并刷二代身份证入场，不能携带无票婴幼儿童入场。港澳台及境外、非二代身份证客人均不适用。
+                    </dd>
+                </dl>
+                <dl class="clearfix row">
+                    <dt class="col-20">使用方法</dt>
+                    <dd class="col-80">
+                        无需取票，凭身份证直接验证入园<br />
+                        入园时间：09:00~16:00<br />
+                        补充说明：入场时每位出行人员均需提供各自的实体二代身份证进行验证。
+                    </dd>
+                </dl>
+                <dl class="clearfix row">
+                    <dt class="col-20">重要条款</dt>
+                    <dd class="col-80">
+                        请务必保证您填写的姓名、身份证号码、手机号码真实正确有效，购买电子票的客人请务必携带对应的实体二代身份证。<br />
+                        预订成功后无法修改且无法退订，如因信息填错或无相应证件造成无法入园，概不负责，敬请谅解。<br />
+                        如您的身份证号码最后一位为英文字母，请填写大写字母，谢谢。<br />
+                    </dd>
+                </dl>
+                <dl class="clearfix row">
+                    <dt class="col-20">退改规则</dt>
+                    <dd class="col-80">
+                        该产品一经预订成功，不支持退改。<br />
+                        敬请谅解
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="~/assets/js/layer.js"></script>
+<script>
+    $(function () {
+        $('.btn-tips').on("click", function () {
+            layer.open({
+                type: 1,
+                shade: true,
+                title: false, //不显示标题
+                content: $('.list-content').html()
+
+            });
+        });
+        $.each(['.book-notice'], function (index, item) {
+
+            $(this).on("click", function () {
+                layer.open({
+                    type: 1,
+                    shade: true,
+                    title: "预订须知", //不显示标题
+                    content: $('.ticket-list-more').html()
+
+                });
+            });
+        });
+    });
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url: 'http://www.soyotu.com/OAuth2/Login',
+            dataType: 'json',
+            //processData: false,
+            type: 'get',
+            success: function (data) {
+                alert(data.OpenId);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //alert(XMLHttpRequest.status);
+                //alert(XMLHttpRequest.readyState);
+                //$('body').html(('錯誤::==================='+XMLHttpRequest.responseText)) ;
             }
-
-                ul#productList .col-md-6.br {
-                    clear: left;
-                }
-
-                ul#productList .col-md-6 a {
-                    text-decoration: none; 
-                }
-                .m10{margin:10px;}
-                .mb15{ margin-bottom:15px;}
-    </style>
-</head>
-<body>
-    <div class="container content">
+        });
+    });
+</script>
+@*<div class="container content">
         <div id="productList" class="row">
             @for (int i = 0; i <= Model.Count - 1; i++)
             {
                 var item = Model[i];
-                <div class="@(i > 0 && i % 4==0 ? "br" : null) col-xs-12 col-md-6 mb15">
+                <div class="@(i > 0 && i%4 == 0 ? "br" : null) col-xs-12 col-md-6 mb15">
                     <a class="btn btn-success button col-xs-12" href="@Url.Action("ProductItem", "TenPayV3", new {productId = item.Id, hc = item.GetHashCode()})">
                         <div class="">
                             <h2>@item.Name</h2>
@@ -49,6 +260,6 @@
                 </div>
             }
         </div>
-    </div>
-</body>
+    </div>*@
+
 </html>
