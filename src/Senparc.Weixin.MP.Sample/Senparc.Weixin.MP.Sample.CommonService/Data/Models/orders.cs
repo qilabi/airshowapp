@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ServiceStack.DataAnnotations;
 
 namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
 {
@@ -7,6 +8,7 @@ namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
     /// 订单表
     /// </summary>
     [Serializable]
+    [Alias("dt_orders")]
     public  class orders
     {
         public orders()
@@ -44,20 +46,21 @@ namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
         private DateTime? _complete_time;
         private string _strStatus = "";
         private int _articleid = 0;
+        
         private bool _get_order_payment_status;
-
+         [Ignore]
         public bool get_order_payment_status
         {
             set { _get_order_payment_status = value; }
             get { return _get_order_payment_status; }
         }
-
+        [Ignore]
         public string strStatus
         {
             set { _strStatus = value; }
             get { return _strStatus; }
         }
-
+        [Ignore]
         public int articleid
         {
             set { _articleid = value; }
@@ -306,6 +309,7 @@ namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
         #endregion Model
 
         private List<order_goods> _order_goods;
+        [Ignore]
         /// <summary>
         /// 商品列表
         /// </summary>

@@ -1,4 +1,5 @@
 using System;
+using ServiceStack.DataAnnotations;
 
 namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
 {
@@ -6,6 +7,7 @@ namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
     /// 订单商品表
     /// </summary>
     [Serializable]
+  
     public  class order_goods
     {
         public order_goods()
