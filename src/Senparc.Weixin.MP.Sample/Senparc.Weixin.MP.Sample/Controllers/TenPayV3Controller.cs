@@ -90,6 +90,21 @@ namespace Senparc.Weixin.MP.Sample.Controllers
         [HttpPost]
         public ActionResult PayIt(PostTicketOrder order)
         {
+            var list = new List<object>();
+            if (order.Quantity <= 0)
+            {
+                //錯誤
+            }
+            var nameArr = order.realNames.Split(new char[1] {','}, StringSplitOptions.RemoveEmptyEntries);
+            var identityNoArr = order.replies.Split(new char[1] {','}, StringSplitOptions.RemoveEmptyEntries);
+            if (nameArr.Length != identityNoArr.Length || identityNoArr.Length != order.Quantity)
+            {
+                //
+            }
+            for (int i = 0; i < order.Quantity; i++)
+            {
+               // order.realNames
+            }
             var newOrderNo  = DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
             var builder = new StringBuilder();
             builder.AppendLine("==================PayIt===================");
@@ -102,6 +117,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             builder.AppendLine("url:" + url);
             builder.AppendLine("==================PayIt===================");
             this._logger.Info(builder.ToString());
+
             return Redirect(url);
         }
 
