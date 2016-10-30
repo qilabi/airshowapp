@@ -210,18 +210,18 @@ namespace Senparc.Weixin.MP.Sample.CommonService.CustomMessageHandler
             else if (requestMessage.Content == "测试" || requestMessage.Content == "退出")
             {
                 /*
-                * 这是一个特殊的过程，此请求通常来自于微微嗨（http://www.weiweihi.com）的“盛派网络小助手”应用请求（http://www.weiweihi.com/User/App/Detail/1），
+                * 这是一个特殊的过程，此请求通常来自于微微嗨（http://www.weiweihi.com）的“航展门票中心小助手”应用请求（http://www.weiweihi.com/User/App/Detail/1），
                 * 用于演示微微嗨应用商店的处理过程，由于微微嗨的应用内部可以单独设置对话过期时间，所以这里通常不需要考虑对话状态，只要做最简单的响应。
                 */
                 if (requestMessage.Content == "测试")
                 {
                     //进入APP测试
-                    responseMessage.Content = "您已经进入【盛派网络小助手】的测试程序，请发送任意信息进行测试。发送文字【退出】退出测试对话。10分钟内无任何交互将自动退出应用对话状态。";
+                    responseMessage.Content = "您已经进入【航展门票中心小助手】的测试程序，请发送任意信息进行测试。发送文字【退出】退出测试对话。10分钟内无任何交互将自动退出应用对话状态。";
                 }
                 else
                 {
                     //退出APP测试
-                    responseMessage.Content = "您已经退出【盛派网络小助手】的测试程序。";
+                    responseMessage.Content = "您已经退出【航展门票中心小助手】的测试程序。";
                 }
             }
             else if (requestMessage.Content == "AsyncTest")
@@ -250,7 +250,7 @@ namespace Senparc.Weixin.MP.Sample.CommonService.CustomMessageHandler
                     Title = "开放平台微信授权测试",
                     Description = @"点击进入Open授权页面。
 
-授权之后，您的微信所收到的消息将转发到第三方（盛派网络小助手）的服务器上，并获得对应的回复。
+授权之后，您的微信所收到的消息将转发到第三方（航展门票中心小助手）的服务器上，并获得对应的回复。
 
 测试完成后，您可以登陆公众号后台取消授权。",
                     Url = "http://sdk.weixin.senparc.com/OpenOAuth/JumpToMpOAuth"

@@ -30,6 +30,8 @@ using ZXing;
 using ZXing.Common;
 using System.Collections.Generic;
 using Senparc.Weixin.Exceptions;
+using Castle.Core.Logging;
+using Newtonsoft.Json;
 
 namespace Senparc.Weixin.MP.Sample.Controllers
 {
@@ -38,6 +40,14 @@ namespace Senparc.Weixin.MP.Sample.Controllers
     /// </summary>
     public class TenPayV3Controller : Controller
     {
+        private ILogger _logger;
+
+        public TenPayV3Controller(ILogger logger)
+        {
+            this._logger = logger;
+        }
+
+
         private static TenPayV3Info _tenPayV3Info;
 
         private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
@@ -72,28 +82,36 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             return Redirect(url);
         }
 
+        /// <summary>
+        /// 支付(生成订单)
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult PayIt(PostTicketOrder order)
+        {
+            var newOrderNo  = DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
+            var builder = new StringBuilder();
+            builder.AppendLine("==================PayIt===================");
+            builder.Append("create new order number :" + newOrderNo + " ; telelphone:" + order.telephone + " ;hc:" +
+                           order.hc);
+
+            var returnUrl = string.Format("http://www.soyotu.com/TenPayV3/JsApi");
+            var state = string.Format("{0}|{1}|{2}", order.productId, order.hc, newOrderNo);
+            var url = OAuthApi.GetAuthorizeUrl(TenPayV3Info.AppId, returnUrl, state, OAuthScope.snsapi_base);
+            builder.AppendLine("url:" + url);
+            builder.AppendLine("==================PayIt===================");
+            this._logger.Info(builder.ToString());
+            return Redirect(url);
+        }
+
         #region JsApi支付
 
-        private int GetSessionCount()
-        {
-            if (Session["count"] == null)
-                return 0;
-            else
-                return Int32.Parse(Session["count"].ToString());
-        }
-
-        private void SetSessionCount(int value)
-        {
-            Session["count"] = value;
-        }
-
-        static Dictionary<string, OAuthAccessTokenResult> OAuthCodeCollection = new Dictionary<string, OAuthAccessTokenResult>();
-        static object OAuthCodeCollectionLock = new object();
         public ActionResult JsApi(string code, string state)
         {
-            var sessionCount = GetSessionCount();
-            sessionCount++;
-            SetSessionCount(sessionCount);
+            var builder = new StringBuilder("===============JsApi===========");
+            builder.AppendFormat("state:" + state);
+            builder.AppendLine();
             if (string.IsNullOrEmpty(code))
             {
                 return Content("您拒绝了授权！");
@@ -106,7 +124,207 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                 return Content("验证失败！请从正规途径进入！1001");
             }
 
+            //获取产品信息
+            var stateData = state.Split('|');
+            int productId = 0;
+
+            
+            //return Content(string.Format("已經到這裡 {0}:{1}", stateData[0], stateData[1]));
+            ProductModel product = null;
+
+            if (int.TryParse(stateData[0], out productId))
+            {
+                int hc = 0;
+                if (int.TryParse(stateData[1], out hc))
+                {
+                    //builder.Append(" hc:" + hc.ToString());
+                    
+                    var products = ProductModel.GetFakeProductList();
+                    product = products.FirstOrDefault(z => z.Id == productId);
+
+                    if (product == null || product.GetHashCode() != hc)
+                    {
+                        return Content("商品信息不存在，或非法进入！1002");
+                    }
+                    ViewData["product"] = product;
+                }
+            }
+
+
+            OAuthAccessTokenResult openIdResult = null;
+
+            #region 解決 Auth 出現 40028(Invalid code)錯誤
+
+            try
+            {
+                //通过，用code换取access_token
+
+                var isSecondRequest = false;
+                lock (OAuthCodeCollectionLock)
+                {
+                    isSecondRequest = OAuthCodeCollection.ContainsKey(code);
+                }
+
+                if (!isSecondRequest)
+                {
+                    //第一次请求
+                    //LogUtility.Weixin.DebugFormat("第一次微信OAuth到达，code：{0}", code);
+                    lock (OAuthCodeCollectionLock)
+                    {
+                        OAuthCodeCollection[code] = null;
+                    }
+                }
+                else
+                {
+                    //第二次请求
+                    //LogUtility.Weixin.DebugFormat("第二次微信OAuth到达，code：{0}", code);
+
+                    lock (OAuthCodeCollectionLock)
+                    {
+                        openIdResult = OAuthCodeCollection[code];
+                    }
+                }
+
+                try
+                {
+                    try
+                    {
+                        openIdResult = openIdResult ??
+                                       OAuthApi.GetAccessToken(TenPayV3Info.AppId, TenPayV3Info.AppSecret, code);
+                    }
+                    catch (Exception ex)
+                    {
+                        return Content("OAuth AccessToken错误：" + ex.Message);
+                    }
+
+                    if (openIdResult != null)
+                    {
+                        lock (OAuthCodeCollectionLock)
+                        {
+                            OAuthCodeCollection[code] = openIdResult;
+                        }
+                    }
+                }
+                catch (ErrorJsonResultException ex)
+                {
+                    if (ex.JsonResult.errcode == ReturnCode.不合法的oauth_code)
+                    {
+                        //code已经被使用过
+                        lock (OAuthCodeCollectionLock)
+                        {
+                            openIdResult = OAuthCodeCollection[code];
+                        }
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return Content("授权过程发生错误：" + ex.Message);
+            }
+
+            #endregion
+
+
+            string timeStamp = "";
+            string nonceStr = "";
+            string paySign = "";
+
              
+            string sp_billno = stateData[2].ToString(); //订单
+           
+            string date = DateTime.Now.ToString("yyyyMMdd");
+             
+            try
+            {
+                var ref1 = JsonConvert.SerializeObject(TenPayV3Info);
+                
+                builder.AppendLine("TenPayV3Info:" + ref1);
+
+                
+
+                //创建支付应答对象
+                RequestHandler packageReqHandler = new RequestHandler(null);
+                //初始化
+                packageReqHandler.Init();
+
+                timeStamp = TenPayV3Util.GetTimestamp();
+                nonceStr = TenPayV3Util.GetNoncestr();
+
+                //设置package订单参数
+                packageReqHandler.SetParameter("appid", TenPayV3Info.AppId); //公众账号ID
+                packageReqHandler.SetParameter("mch_id", TenPayV3Info.MchId); //商户号
+                packageReqHandler.SetParameter("nonce_str", nonceStr); //随机字符串
+                packageReqHandler.SetParameter("body", product == null ? "test" : product.Name); //商品信息
+                packageReqHandler.SetParameter("out_trade_no", sp_billno); //商家订单号
+                packageReqHandler.SetParameter("total_fee", product == null ? "100" : (product.Price * 100).ToString());
+                //商品金额,以分为单位(money * 100).ToString()
+                packageReqHandler.SetParameter("spbill_create_ip", Request.UserHostAddress); //用户的公网ip，不是商户服务器IP
+                packageReqHandler.SetParameter("notify_url", TenPayV3Info.TenPayV3Notify); //接收财付通通知的URL
+                packageReqHandler.SetParameter("trade_type", TenPayV3Type.JSAPI.ToString()); //交易类型
+                packageReqHandler.SetParameter("openid", openIdResult.openid); //用户的openId
+
+                string sign = packageReqHandler.CreateMd5Sign("key", TenPayV3Info.Key);
+                packageReqHandler.SetParameter("sign", sign); //签名
+
+                var ref2 = JsonConvert.SerializeObject(openIdResult);
+                builder.AppendLine("openIdResult:" + ref2);
+
+                string data = packageReqHandler.ParseXML();
+                builder.AppendLine(" packageReqHandler.ParseXML();data: " + data);
+                var result = TenPayV3.Unifiedorder(data);
+                builder.AppendLine(" result: " + data);
+                var res = XDocument.Parse(result);
+
+                builder.AppendLine(" TenPayV3.Unifiedorder(data) ; XDocument.Parse(result)");
+                string prepayId = res.Element("xml").Element("prepay_id").Value;
+                builder.AppendLine(" prepayId :" + prepayId);
+                //设置支付参数
+                RequestHandler paySignReqHandler = new RequestHandler(null);
+                paySignReqHandler.SetParameter("appId", TenPayV3Info.AppId);
+                paySignReqHandler.SetParameter("timeStamp", timeStamp);
+                paySignReqHandler.SetParameter("nonceStr", nonceStr);
+                paySignReqHandler.SetParameter("package", string.Format("prepay_id={0}", prepayId));
+                paySignReqHandler.SetParameter("signType", "MD5");
+                paySign = paySignReqHandler.CreateMd5Sign("key", TenPayV3Info.Key);
+
+                ViewData["appId"] = TenPayV3Info.AppId;
+                ViewData["timeStamp"] = timeStamp;
+                ViewData["nonceStr"] = nonceStr;
+                ViewData["package"] = string.Format("prepay_id={0}", prepayId);
+                ViewData["paySign"] = paySign;
+            }
+            catch (Exception ex)
+            {
+                builder.AppendLine(" ex:" + ex.Message);
+            }
+            if (openIdResult != null)
+            {
+                builder.AppendLine(string.Format("用戶[{1}] 支付订单【{0}】，Jsapi支付，请更改订单状态", sp_billno, openIdResult.openid));
+            }
+            this._logger.Info(builder.ToString());
+            //return Content(string.Format("用戶[{1}] 支付订单【{0}】，Jsapi支付，请更改订单状态", sp_billno, openIdResult.openid));
+            return View();
+        }
+
+        static Dictionary<string, OAuthAccessTokenResult> OAuthCodeCollection = new Dictionary<string, OAuthAccessTokenResult>();
+        static object OAuthCodeCollectionLock = new object();
+        public ActionResult JsApiXX(string code, string state)
+        {
+            var builder = new StringBuilder("===============JsApi===========");
+            this._logger.Info(builder.ToString());
+            if (string.IsNullOrEmpty(code))
+            {
+                return Content("您拒绝了授权！");
+            }
+
+            if (!state.Contains("|"))
+            {
+                //这里的state其实是会暴露给客户端的，验证能力很弱，这里只是演示一下
+                //实际上可以存任何想传递的数据，比如用户ID，并且需要结合例如下面的Session["OAuthAccessToken"]进行验证
+                return Content("验证失败！请从正规途径进入！1001");
+            } 
 
             //获取产品信息
             var stateData = state.Split('|');
@@ -266,8 +484,8 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             ViewData["nonceStr"] = nonceStr;
             ViewData["package"] = string.Format("prepay_id={0}", prepayId);
             ViewData["paySign"] = paySign;
-
-            return View();
+            return Content("www");
+            //return View();
         }
 
         /// <summary>
@@ -460,7 +678,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
         public ActionResult PayNotifyUrl()
         {
             ResponseHandler resHandler = new ResponseHandler(null);
-
+            
             string return_code = resHandler.GetParameter("return_code");
             string return_msg = resHandler.GetParameter("return_msg");
 
@@ -489,7 +707,14 @@ namespace Senparc.Weixin.MP.Sample.Controllers
    <return_code><![CDATA[{0}]]></return_code>
    <return_msg><![CDATA[{1}]]></return_msg>
 </xml>", return_code, return_msg);
-
+            var builder = new StringBuilder();
+            builder.AppendLine("==============PayNotifyUrl=================");
+            builder.AppendLine("xml:" + xml);
+            builder.AppendLine("return_code:" + return_code);
+            builder.AppendLine("return_msg:" + return_msg);
+            
+            builder.AppendLine("==============PayNotifyUrl=================");
+            this._logger.Info(builder.ToString());
             return Content(xml, "text/xml");
         }
 
@@ -809,7 +1034,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             {
                 return Content("商品信息不存在，或非法进入！2003");
             }
-
+            return View(product);
             //判断是否正在微信端
             var userAgent = Request.UserAgent;
             if (BroswerUtility.SideInWeixinBroswer(HttpContext))
