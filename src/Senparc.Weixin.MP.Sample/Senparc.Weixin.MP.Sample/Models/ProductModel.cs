@@ -36,8 +36,8 @@ namespace Senparc.Weixin.MP.Sample.Models
         {
             var list = ProductList ?? new List<ProductModel>()
             {
-                new ProductModel(1,"成人票(电子票)",(decimal)500.00,(decimal)1.00),
-                new ProductModel(2,"老人儿童学生(电子票)",(decimal)300.00,(decimal)3.00),
+                new ProductModel(1,"成人票(电子票)",(decimal)500.00,(decimal)490.00),
+                new ProductModel(2,"老人儿童学生(电子票)",(decimal)300.00,(decimal)270.00)
       
             };
             ProductList = ProductList ?? list;
