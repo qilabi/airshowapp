@@ -13,7 +13,7 @@ namespace Senparc.Weixin.QY.Test
             var token = "Senparc";
             var timeStamp = "Weixin";
             var nonce = "QY";
-            var msgEncrypt = "盛派网络";
+            var msgEncrypt = "航展门票中心";
             var result = Signature.GenarateSinature(token, timeStamp, nonce, msgEncrypt);
 
             Assert.IsNotNull(result);

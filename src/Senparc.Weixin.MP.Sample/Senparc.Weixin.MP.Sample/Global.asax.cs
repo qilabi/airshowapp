@@ -115,7 +115,7 @@ namespace Senparc.Weixin.MP.Sample
             AccessTokenContainer.Register(
                 System.Configuration.ConfigurationManager.AppSettings["WeixinAppId"],
                 System.Configuration.ConfigurationManager.AppSettings["WeixinAppSecret"],
-                "【盛派网络小助手】公众号");
+                "【航展门票中心】公众号");
         }
 
         /// <summary>
@@ -126,13 +126,13 @@ namespace Senparc.Weixin.MP.Sample
             Senparc.Weixin.QY.Containers.AccessTokenContainer.Register(
                 System.Configuration.ConfigurationManager.AppSettings["WeixinCorpId"],
                 System.Configuration.ConfigurationManager.AppSettings["WeixinCorpSecret"],
-                "【盛派网络】企业号"
+                "【航展门票中心】企业号"
                 );
 
             Senparc.Weixin.QY.Containers.ProviderTokenContainer.Register(
                 System.Configuration.ConfigurationManager.AppSettings["WeixinCorpId"],
                 System.Configuration.ConfigurationManager.AppSettings["WeixinCorpSecret"],
-                "【盛派网络】企业号"
+                "【航展门票中心】企业号"
                 );
         }
 
@@ -220,7 +220,7 @@ namespace Senparc.Weixin.MP.Sample
                 getComponentVerifyTicketFunc,
                 getAuthorizerRefreshTokenFunc,
                 authorizerTokenRefreshedFunc,
-                "【盛派网络】开放平台");
+                "【航展门票中心】开放平台");
         }
     }
 }
