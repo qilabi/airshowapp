@@ -95,6 +95,9 @@
     <Compile Include="Data\Models\BaseModels.cs" />
     <Compile Include="Data\Models\Entity.cs" />
     <Compile Include="Data\Models\IEntity.cs" />
+    <Compile Include="Data\Models\orders.cs" />
+    <Compile Include="Data\Models\order_config.cs" />
+    <Compile Include="Data\Models\order_goods.cs" />
     <Compile Include="Data\Models\UserIdentity.cs" />
     <Compile Include="Data\SavedEventArgs.cs" />
     <Compile Include="Download\CodeRecord.cs" />
