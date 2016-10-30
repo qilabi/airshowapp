@@ -1,0 +1,2 @@
+INFO  2016-10-30 00:11:19,324 [6    ] xin.MP.Sample.Controllers.HomeController - 登錄到首頁
+INFO  2016-10-30 00:11:19,324 [7    ] xin.MP.Sample.Controllers.HomeController - 登錄到首頁
