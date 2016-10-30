@@ -1,0 +1,585 @@
+﻿ol, ul {
+list-style: none;
+}
+header.bar {
+    background: #dc3c38;
+}
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+header .title {
+    color: #fff;
+}
+
+.dest-captain {
+    background-color: #fff;
+}
+.dest-captain .headimg {
+    overflow: hidden;
+    position: relative;
+    height: auto;
+}
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    border: 0;
+    background: transparent;
+    vertical-align: baseline;
+    font-style: inherit;
+    font-size: 100%;
+}
+.info-img-mask {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(0,0,0,0.2);
+}
+
+.dest-captain #J_dest-name-wrap-point {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.dest-captain .dest-name-wrap {
+    z-index: 12;
+    position: absolute;
+    bottom: 20px;
+    left: 10px;
+    color: #fff;
+    width: 100%;
+}
+.dest-captain .dest-name-wrap .dest-name {
+    font-family: 'PingFangSC-Medium',sans-serif,"Droid Sans","Droid Sans Fallback","Helvetica Neue",Helvetica,STHeiTi,sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+}
+.clearfix:before, .clearfix:after {
+    display: table;
+    content: "";
+}
+.dest-captain .weather-tip {
+    display: none;
+    color: #fff;
+    line-height: 14px;
+    width: 90px;
+    font-size: 17px;
+    margin-left: 21px;
+}
+img {
+    vertical-align: top;
+}
+.headimg img {
+    width: 100%;
+}
+.dest-captain .dest-name-wrap .dest-rank {
+    margin-top: 10px;
+    font-size: 14px;
+    display: inline-block;
+}
+.dest-captain .dest-name-wrap .dest-rank span {
+    font-family: 'PingFangSC-Medium',sans-serif,"Droid Sans","Droid Sans Fallback","Helvetica Neue",Helvetica,STHeiTi,sans-serif;
+    font-size: 19px;
+    color: #dc5900;
+}
+.dest-captain .score-wrap {
+    line-height: 15px;
+    margin-top: 10px;
+    color: #fff;
+}
+.dest-captain .stars-wrap {
+    width: 90px;
+    height: 15px;
+    position: relative;
+}
+.dest-captain .stars-bg {
+    width: 90px;
+    height: 15px;
+    display: inline-block;
+    background: url(../assets/images/score-bg_884086eb.png) repeat-x;
+    background-size: auto 15px;
+    margin-right: 3px;
+}
+.dest-captain .stars-score {
+    position: absolute;
+    top: 0;
+    overflow: hidden;
+    width: 90px;
+    height: 15px;
+    display: inline-block;
+    background: url(../assets/images/score-on.png) repeat-x;
+    background-size: auto 15px;
+    margin-right: 3px;
+}
+.dest-captain .comment-num {
+    margin-left: 10px;
+    line-height: 20px;
+}
+.fl {
+    float: left;
+}
+.dest-top-intro {
+    background-color: #fff;
+    text-align: center;
+    padding-bottom: 20px;
+}
+#destPage section {
+    background-color: #fff;
+}
+.dest-top-intro {
+    background-color: #fff;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+.dest-top-intro .dest-wrap {
+    text-align: left;
+    overflow: hidden;
+    position: relative;
+    padding: 12.5px 12.5px 0 12.5px;
+    background-color: #fff;
+}
+.dest-top-intro .intro-item {
+    height: 40px;
+    line-height: 40px;
+    font-size: 15px;
+    position: relative;
+}
+.dest-top-intro .intro-item span {
+    display: inline-block;
+    width: 60px;
+    position: absolute;
+    text-align: justify;
+    text-justify: distribute-all-lines;
+    text-align-last: justify;
+    color: #999;
+    overflow: hidden;
+    height: 40px;
+}
+.dest-top-intro .intro-item p {
+    padding-left: 80px;
+    padding-right: 20px;
+    -webkit-box-flex: 1;
+    color: #333;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 40px;
+    display: -webkit-box;
+}
+.dest-top-intro .intro-item .intro-item-more {
+    width: 12px;
+    height: 16px;
+    background: url(../assets/images/icon-right-small.png) no-repeat;
+    background-size: 100%;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 12px;
+}
+.dest-top-intro .intro-btn {
+    display: inline-block;
+    padding: 0 15px;
+    margin-top: 6px;
+}
+.btn-tips {
+        height: 44px;
+    line-height: 44px;
+    text-align: center;
+    font-size: 17px;
+    color: #60a9f5;
+}
+.border-top:before {
+    width: 100%;
+    height: 1px;
+    left: 0;
+}
+.border-top:before, .border-bottom:after, .border-left:before, .border-right:after {
+    content: "";
+    position: absolute;
+    font-size: 0;
+    line-height: 0;
+    background-color: #e7e7e7;
+}
+.scener-ticket-title {
+    position: relative;
+    margin: 10px 0 0 0;
+    padding: 17px 0 17px 15px;
+    height: 75px;
+}
+.dest-tickets .titleh2 {
+    position: relative;
+    margin: 10px 0 0 0;
+    padding: 17px 0 17px 15px;
+    font-size: 1.1rem;
+    font-family: "microsoft yahei";
+    color: #111;
+    margin-right: 0.5rem;
+    display: inline-block;
+    vertical-align: top;
+    font-weight: normal;
+}
+.content section {
+    background-color: #fff;
+}
+.dest-tickets .title-icon {
+    background: url(../assets/images/icon-ticket.png) no-repeat;
+    background-size: 42px;
+}
+.title-icon {
+    width: 42px;
+    height: 42px;
+    display: block;
+    float: left;
+    margin-right: 5px;
+}
+.scener-ticket-title>h2 {
+    font-weight: 500;
+    font-size: 17px;
+    text-align: left;
+    line-height: 21px;
+    color: #333;
+}
+
+.scener-ticket-title .sub-title {
+    font-size: 12px;
+    color: #333;
+    font-weight: 400;
+    line-height: 24px;
+    margin-bottom: 10px;
+    padding: 8px 0;
+}
+.scener-ticket-title .arrow-wrap {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    height: 100%;
+    width: 60px;
+}
+.scener-ticket-title .arrow-right {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: url(../assets/images/icon-right-small.png) no-repeat;
+    background-size: 100%;
+    width: 20px;
+    height: 36px;
+}
+.dest-tickets .dest-wrap {
+    background-color: #fff;
+    padding: 0 15px;
+}
+.dest-tickets .ticket-item {
+    position: relative;
+    padding: 20px 0;
+    min-height: 128px;
+}
+.ticket-item {
+    border-top: 1px solid #e3e3e3;
+    padding: 12px 10px;
+    overflow: hidden;
+    background-color: #FFF;
+}
+.dest-tickets .ticket-left {
+    float: left;
+    position: relative;
+    padding-right: 60px;
+}
+.dest-tickets .ticket-left h1 {
+    font-family: "华文黑体",Helvetica,sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+}
+.dest-tickets .tips {
+    color: #60a9f5;
+}
+.dest-tickets .tips span {
+    display: inline-block;
+    background-size: 12px;
+    font-size: 11px;
+    margin-right: 5px;
+    color: #74b8f7;
+    padding: 2px 4px;
+    border: 1px solid;
+    margin-bottom: 5px;
+}
+.dest-tickets .book-notice {
+    color: #999;
+    margin-top: 7px;
+    display: block;
+        font-size: 13px;
+}
+.dest-tickets .book-notice:after {
+    content: '';
+    position: absolute;
+    margin-left: 5px;
+    margin-top: 3px;
+    height: 7px;
+    width: 7px;
+    border-top: 1px solid #999;
+    border-left: 1px solid #999;
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    transform-origin: 50% 50%;
+    -webkit-transform-origin: 50% 50%;
+}
+.dest-tickets .ticket-right {
+    position: absolute;
+    right: 0;
+    bottom: 20px;
+    width: 70px;
+    float: right;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-orient: vertical;
+}
+.dest-tickets .ticket-price {
+    font-family: "华文黑体",Helvetica,sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    color: #dc5900;
+    text-align: right;
+    margin-bottom: 6px;
+}
+.dest-tickets .ticket-origin-price {
+    text-align: right;
+    text-decoration: line-through;
+    font-size: 12px;
+    color: #8a9399;
+    margin-bottom: 6px;
+}
+.dest-tickets .ticket-book {
+    width: 55px;
+    height: 26px;
+    font-family: "华文黑体",Helvetica,sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #fff;
+    background-color: #f33920;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    line-height: 26px;
+    text-align: center;
+    margin-left: 15px;
+}
+.dest-tickets .ticket-pay-type {
+    border: 1px solid #f33920;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    line-height: 16px;
+    width: 55px;
+    height: 16px;
+    font-size: 10px;
+    color: #666;
+    margin-left: 15px;
+    text-align: center;
+}
+
+
+.ticket-list-more {
+    width: 100%;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    background-color: white;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -ms-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+}
+
+.scener-ticket-list li.active .ticket-list-more {
+    min-height: 50px;
+    height: auto;
+    opacity: 1;
+}
+
+.ticket-list-moreinfo {
+    padding: 0 1rem 1rem 1rem;
+    max-height: 275px;
+    overflow: auto;
+}
+
+    .ticket-list-moreinfo dl {
+        clear: both;
+        font: 400 0.7rem/1rem 'microsoft yahei';
+        color: #666;
+        line-height: 1.2rem;
+        padding: .2rem 0;
+        border: 0;
+    }
+
+        .ticket-list-moreinfo dl dt {
+            color: #333;
+            font-weight:bold;
+            float: left;
+            width: 5em;
+        }
+
+        .ticket-list-moreinfo dl dd {
+            float: left;
+            word-break: break-all;
+        }
+  
+  .list-content h4 {
+    margin: 0 0 .4rem;
+    color: #333;
+    font-weight: bold;
+}
+.list-content h5 {
+  font: 400 0.7rem/1rem 'microsoft yahei';
+  color: #333;
+}
+.list-content p {
+    font: 400 0.7rem/1rem 'microsoft yahei';
+    color: #666;
+    line-height: 1.2rem;
+    display: block;
+}
+.bar .button-link {
+    color: white;
+}
+.order-top {
+    line-height: 1.8em;
+    border-bottom: 1px solid #d4d4d4;
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+    height: 71px;
+}
+.order-top h3 {
+    font-weight: 500;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.order-top .scope-book-notice {
+    font-size: 14px;
+    color: #abaeb2;
+    position: absolute;
+    bottom: 10px;
+    right: 18px;
+}
+.order-top .scope-book-notice span {
+    vertical-align: middle;
+    padding: 0 5px 0 0;
+}
+.order-infor{
+    font-size: 14px;
+}
+.order-infor .bd {
+    padding: 0 0 60px;
+}
+.order-infor .bd .order-item {
+    margin: 5px 8px;
+    background: #fff;
+}
+.order-infor .bd .order-item ul {
+    padding: 0 10px;
+    border: 1px solid #d4d4d4;
+    border-radius: 3px;
+}
+.order-infor .bd .order-item li.play-date {
+    position: relative;
+}
+.order-infor .bd .order-item li:first-child {
+    border-top: 0;
+}
+.order-infor .bd .order-item ul li {
+    height: 44px;
+    border-top: 1px solid #d9d9d9;
+    line-height: 44px;
+}
+.order-infor .bd .order-item ul li label {
+    display: inline-block;
+    width: 74px;
+}
+.order-infor .bd .order-item li.play-date span {
+    color: #abaeb2;
+}
+.order-infor .bd .order-item li.play-date i {
+    position: absolute;
+    top: 16px;
+    right: 0;
+}
+.order-infor .bd .order-item .number {
+    display: inline-block;
+}
+.order-infor .bd .order-item .number span {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+}
+.order-infor .bd .order-item .number .unactive {
+    background: url(../images/unactive.png) no-repeat;
+    background-size: 22px auto;
+}
+.order-infor .bd .order-item .number .reduce {
+    background:  url(../images/reduce.png) no-repeat;
+    background-size: 22px auto;
+}
+.order-infor .bd .order-item .number .ticket-num {
+    width: 29px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #c8cacc;
+    line-height: 20px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 2px;
+}
+.order-infor .bd .order-item .number .increase {
+    background:url(../images/increase.png) no-repeat;
+    background-size: 22px auto;
+}
+.order-infor .ft {
+    position: fixed;
+    bottom: 2.5rem;
+    left: 0;
+    overflow: hidden;
+    zoom: 1;
+    box-sizing: border-box;
+    width: 100%;
+    height: 54px;
+    padding: 0 10px;
+    border-top: #bcc0c4;
+    background: #fff;
+    box-shadow: 2px 0 1px 1px rgba(0,0,0,.2)!important;
+}
+.order-infor .ft .price {
+    float: left;
+    font-size: 18px;
+    line-height: 54px;
+}
+.order-infor .ft .price span {
+    font-weight: 700;
+    color: #f55925;
+}
+.order-infor .ft .submit {
+    float: right;
+    margin: 10px 0 0;
+}
+.order-infor .ft .submit a {
+    display: block;
+    width: 89px;
+    height: 35px;
+    font-family: Helvetica;
+    line-height: 35px;
+    text-align: center;
+    color: #fff;
+    border-radius: 4px;
+    background: #f55925;
+}

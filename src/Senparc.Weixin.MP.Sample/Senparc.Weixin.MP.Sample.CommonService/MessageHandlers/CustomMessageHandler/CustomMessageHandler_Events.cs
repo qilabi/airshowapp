@@ -57,7 +57,7 @@ Nuget地址：https://www.nuget.org/packages/Senparc.Weixin.MP
 
 我们期待您的意见和建议，客服热线：400-031-8816。
 
-感谢您对盛派网络的支持！
+感谢您对 的支持！
 
 © 2016 Senparc", codeRecord.Version, codeRecord.IsWebVersion ? "网页版" : ".chm文档版");
         }
