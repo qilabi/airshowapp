@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -20,6 +21,9 @@ using Senparc.Weixin.Open.CommonAPIs;
 using Senparc.Weixin.Open.ComponentAPIs;
 using Senparc.Weixin.Open.Containers;
 using Senparc.Weixin.Threads;
+using Castle.Facilities.Logging;
+using Castle.Windsor;
+using Senparc.Weixin.MP.Sample.App_Code;
 
 namespace Senparc.Weixin.MP.Sample
 {
@@ -28,8 +32,29 @@ namespace Senparc.Weixin.MP.Sample
 
     public class WebApiApplication : System.Web.HttpApplication
     {
+        private readonly IWindsorContainer container;
+        private readonly IWindsorContainer containerByCon;
+
+        public WebApiApplication()
+        {
+            this.container = new WindsorContainer().Install(new DependencyInstaller());
+            this.containerByCon = new WindsorContainer().Install(new DependencyInstaller());
+        }
+        public override void Dispose()
+        {
+            this.container.Dispose();
+            this.containerByCon.Dispose();
+            base.Dispose();
+        }
         protected void Application_Start()
         {
+
+            //var iocContainer = new Castle.Windsor.WindsorContainer();
+            container.AddFacility<LoggingFacility>(
+                    f => f.UseLog4Net().WithConfig("log4net.config"));
+            containerByCon.AddFacility<LoggingFacility>(
+                    f => f.UseLog4Net().WithConfig("log4net.config"));
+
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
@@ -45,6 +70,14 @@ namespace Senparc.Weixin.MP.Sample
             RegisterWeixinThirdParty(); //注册微信第三方平台
 
             Senparc.Weixin.Config.IsDebug = true;//这里设为Debug状态时，/App_Data/目录下会生成日志文件记录所有的API请求日志，正式发布版本建议关闭
+
+            //API注入包
+            GlobalConfiguration.Configuration.Services.Replace(
+                typeof(IHttpControllerActivator),
+                new WindsorActivator(this.container));
+            //controller 注入包
+            var controllerFactory = new WindsorControllerFactory(containerByCon.Kernel);
+            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }
 
         /// <summary>

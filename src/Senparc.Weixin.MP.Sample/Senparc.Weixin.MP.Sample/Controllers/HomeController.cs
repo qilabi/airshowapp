@@ -22,13 +22,26 @@ using Senparc.Weixin.Cache;
 using Senparc.Weixin.MP.CommonAPIs;
 using Senparc.Weixin.MP.Sample.CommonService.Download;
 using Senparc.Weixin.Open.CommonAPIs;
+using Castle.Core.Logging;
 
 namespace Senparc.Weixin.MP.Sample.Controllers
 {
     public class HomeController : BaseController
-    {
+    { 
+
+        public HomeController( )
+        {
+            
+        }
+
+
         public ActionResult Index()
         {
+            return RedirectToRoute(new
+            {
+                controller = "TenPayV3",
+                action = "ProductList"
+            });
             Func<string, FileVersionInfo> getFileVersionInfo = dllFileName => 
                 FileVersionInfo.GetVersionInfo(Server.MapPath("~/bin/" + dllFileName));
 
@@ -51,7 +64,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             var configHelper = new ConfigHelper(this.HttpContext);
             var config = configHelper.GetConfig();
             TempData["NewestDocumentVersion"] = config.Versions.First();
-
+            
             return View();
         }
 
