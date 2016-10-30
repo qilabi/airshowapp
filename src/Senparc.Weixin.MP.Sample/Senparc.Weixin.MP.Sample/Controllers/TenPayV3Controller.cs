@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using Senparc.Weixin.Exceptions;
 using Castle.Core.Logging;
 using Newtonsoft.Json;
+using Senparc.Weixin.MP.Sample.CommonService.Data.Models;
 
 namespace Senparc.Weixin.MP.Sample.Controllers
 {

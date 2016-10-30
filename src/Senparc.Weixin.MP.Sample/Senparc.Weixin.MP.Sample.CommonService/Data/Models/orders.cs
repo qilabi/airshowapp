@@ -13,7 +13,7 @@ namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
     {
         public Orders()
         {
-            order_no =Utils.GetOrderNumber();
+          
             payment_status = 1;
 
         }

@@ -29,7 +29,8 @@ namespace Senparc.Weixin.DB.Tests
             IBaseRepository<Orders, int> baseRepository = new BaseRepository<Orders, int>();
             Orders order=new Orders();
 
-            baseRepository.Insert(order);
+           long aa=  baseRepository.Insert(order);
+            Console.WriteLine(aa);
         }
     }
 }

@@ -92,6 +92,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Application\OrdersService.cs" />
     <Compile Include="Data\Contracts\IBaseRepository.cs" />
     <Compile Include="Data\Contracts\IOrdersRepository.cs" />
     <Compile Include="Data\Models\BaseModels.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Data\Models\Orders.cs" />
     <Compile Include="Data\Models\order_config.cs" />
     <Compile Include="Data\Models\order_goods.cs" />
+    <Compile Include="Data\Models\PostTicketOrder.cs" />
     <Compile Include="Data\Models\UserIdentity.cs" />
     <Compile Include="Data\Repository\BaseRepository.cs" />
     <Compile Include="Data\Repository\OrdersRepository.cs" />
