@@ -45,7 +45,8 @@
                             </li>
                             <li>
                                 <label>手机号</label>
-                                <input type="tel" data-key="phone" ng-model="client.phone" class="item-phone" placeholder="该手机号用于查询订单">
+                                <input type="tel" data-key="phone" required ng-model="client.phone" class="item-phone" ng-minlength="11"
+                                       ng-maxlength="11" placeholder="该手机号用于查询订单">
                             </li>
                             <li>
                                 <label>购买张数</label>
@@ -90,7 +91,7 @@
                         <span></span>
                     </div>
                     <div class="submit">
-                        <input type="submit" ng-click="ticket.pay()" value="确认" class="ordersubmit" />
+                        <input type="submit" ng-click="ticket.pay()" value="提交" class="ordersubmit" />
                         
                     </div>
                 </div>
@@ -185,7 +186,7 @@
                 cr += "," + $scope.ticket.identityInfos[i].identityNo;
             }
             cr = cr.substring(1);
-            $log.debug("Combined identityNos: " + cr);
+            //$log.debug("Combined identityNos: " + cr);
 
             return cr;
         }
@@ -195,7 +196,7 @@
                 cr += "," + $scope.ticket.identityInfos[i].realName;
             }
             cr = cr.substring(1);
-            $log.debug("Combined realName: " + cr);
+            //$log.debug("Combined realName: " + cr);
             return cr;
         }
 
@@ -203,10 +204,14 @@
         var identitys = $scope.ticket.combineReplies();
         var names = $scope.ticket.combineReplies();
         var phone = $scope.client.phone;
+        if (!phone || phone.length != 11) {
+            alert('您输入的手机号码有误!');
+            return;
+        }
         var quantity = $scope.ticket.qty;
         var unitPrice = $scope.ticket.unitPrice;
             document.getElementById('form1').submit();
-         $log.debug(identitys +":"+names +'::'+ phone);
+            $log.debug(identitys +":"+names +'::'+ phone);
         }
     }
 );
