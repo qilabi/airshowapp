@@ -33,6 +33,9 @@ using Senparc.Weixin.Exceptions;
 using Castle.Core.Logging;
 using Newtonsoft.Json;
 using Senparc.Weixin.MP.Sample.CommonService.Data.Models;
+using Senparc.Weixin.MP.Sample.CommonService.Data.Application;
+using Senparc.Weixin.MP.Sample.CommonService.Domain.AirTicket;
+using Senparc.Weixin.MP.Sample.CommonService.Data;
 
 namespace Senparc.Weixin.MP.Sample.Controllers
 {
@@ -91,22 +94,70 @@ namespace Senparc.Weixin.MP.Sample.Controllers
         [HttpPost]
         public ActionResult PayIt(PostTicketOrder order)
         {
-            var list = new List<object>();
+            var user = Session["UserInfo"];
+            if (user == null) return RedirectToRoute(new {controller = "OAuth2", action = "Login"});
+            var userInfo = user as OAuthUserInfo;
+             
+
+            var products = ProductModel.GetFakeProductList();
+            var product = products.FirstOrDefault(z => z.Id == order.productId);
+
             if (order.Quantity <= 0)
             {
                 //錯誤
+                ViewData["message"] = "数量不能小于1!";
+                return RedirectToAction("ProductItem", new {productId = order.productId, hc = order.hc});
             }
+              
             var nameArr = order.realNames.Split(new char[1] {','}, StringSplitOptions.RemoveEmptyEntries);
             var identityNoArr = order.replies.Split(new char[1] {','}, StringSplitOptions.RemoveEmptyEntries);
             if (nameArr.Length != identityNoArr.Length || identityNoArr.Length != order.Quantity)
             {
-                //
+                ViewData["message"] = "您的姓名和身份证号码未填充完整!";
+                return RedirectToAction("ProductItem", new {productId = order.productId, hc = order.hc});
             }
+             
+            var model = new PostOrderDto()
+            {
+                Title = product.Name,
+                OpenId = userInfo.openid,
+                OrderNo = Utils.GetOrderNumber(),
+                Telephone = order.telephone,
+                Dtime = DateTime.Parse(order.date),
+                Amount = product.RealPrice * order.Quantity
+            };
+            model.Title += "(" + model.Dtime.ToString("yyyy年MM月dd日") + ")";
+            var identityInfoValid = true;
             for (int i = 0; i < order.Quantity; i++)
             {
-               // order.realNames
+                var line = new PostOrderLineDto()
+                {
+                    Name = nameArr[i],
+                    IdentityCardNo = identityNoArr[i],
+                    UnitPrice = order.unitPrice
+                };
+                if (string.IsNullOrEmpty(line.Name) || string.IsNullOrEmpty(line.IdentityCardNo))
+                {
+                    identityInfoValid = false;
+                    break;
+                }
+                model.Lines.Add(line);
             }
-            var newOrderNo  = DateTime.Now.ToString("HHmmss") + TenPayV3Util.BuildRandomStr(28);
+            if (!identityInfoValid)
+            {
+                ViewData["message"] = "您的姓名和身份证号码未填充完整!";
+                return RedirectToAction("ProductItem", new { productId = order.productId, hc = order.hc });
+            }
+
+            
+            var commandService = new AirTicketCommand();
+            var orderResult = commandService.CreateOrder(model);     //生成订单
+            if (!orderResult.Success)
+            {
+                ViewData["message"] = orderResult.Message;
+                return RedirectToAction("ProductItem", new { productId = order.productId, hc = order.hc });  
+            }
+            var newOrderNo = orderResult.Value;
             var builder = new StringBuilder();
             builder.AppendLine("==================PayIt===================");
             builder.Append("create new order number :" + newOrderNo + " ; telelphone:" + order.telephone + " ;hc:" +
@@ -118,7 +169,6 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             builder.AppendLine("url:" + url);
             builder.AppendLine("==================PayIt===================");
             this._logger.Info(builder.ToString());
-
             return Redirect(url);
         }
 
@@ -255,7 +305,8 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
              
             string sp_billno = stateData[2].ToString(); //订单
-           
+            var commandService = new AirTicketCommand();
+            var orderEntity = commandService.GetOrder(sp_billno);
             string date = DateTime.Now.ToString("yyyyMMdd");
              
             try
@@ -273,17 +324,19 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
                 timeStamp = TenPayV3Util.GetTimestamp();
                 nonceStr = TenPayV3Util.GetNoncestr();
-
+                var totalFee = (Convert.ToDouble(orderEntity.Amount) * 100).ToString();
                 //设置package订单参数
                 packageReqHandler.SetParameter("appid", TenPayV3Info.AppId); //公众账号ID
                 packageReqHandler.SetParameter("mch_id", TenPayV3Info.MchId); //商户号
                 packageReqHandler.SetParameter("nonce_str", nonceStr); //随机字符串
-                packageReqHandler.SetParameter("body", product == null ? "test" : product.Name); //商品信息
-                packageReqHandler.SetParameter("out_trade_no", sp_billno); //商家订单号
-                packageReqHandler.SetParameter("total_fee", product == null ? "100" : (product.Price * 100).ToString());
+                packageReqHandler.SetParameter("body", orderEntity == null ? "test" : orderEntity.Title); //商品信息
+                packageReqHandler.SetParameter("out_trade_no", orderEntity.OrderNo); //商家订单号
+                packageReqHandler.SetParameter("total_fee",
+                    orderEntity == null ? "100" : totalFee);
                 //商品金额,以分为单位(money * 100).ToString()
                 packageReqHandler.SetParameter("spbill_create_ip", Request.UserHostAddress); //用户的公网ip，不是商户服务器IP
-                packageReqHandler.SetParameter("notify_url", TenPayV3Info.TenPayV3Notify); //接收财付通通知的URL
+                packageReqHandler.SetParameter("notify_url",
+                    TenPayV3Info.TenPayV3Notify + "?orderNo=" + orderEntity.OrderNo); //接收财付通通知的URL
                 packageReqHandler.SetParameter("trade_type", TenPayV3Type.JSAPI.ToString()); //交易类型
                 packageReqHandler.SetParameter("openid", openIdResult.openid); //用户的openId
 
@@ -291,7 +344,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                 packageReqHandler.SetParameter("sign", sign); //签名
 
                 var ref2 = JsonConvert.SerializeObject(openIdResult);
-                builder.AppendLine("openIdResult:" + ref2);
+                builder.AppendLine("openIdResult:" + ref2 + ";totalFee=" + totalFee);
 
                 string data = packageReqHandler.ParseXML();
                 builder.AppendLine(" packageReqHandler.ParseXML();data: " + data);
@@ -299,8 +352,14 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                 builder.AppendLine(" result: " + data);
                 var res = XDocument.Parse(result);
 
-                builder.AppendLine(" TenPayV3.Unifiedorder(data) ; XDocument.Parse(result)");
-                string prepayId = res.Element("xml").Element("prepay_id").Value;
+                builder.AppendLine(" TenPayV3.Unifiedorder(data) ; XDocument.Parse(result); res:" + res.ToString());
+                var elePrepayId = res.Element("xml").Element("prepay_id");
+                if (elePrepayId == null)
+                    builder.AppendLine(" prepayId Elment is null ");
+                string prepayId = elePrepayId.Value;
+
+                if (!string.IsNullOrEmpty(prepayId))
+                    builder.AppendLine(" prepayId :" + prepayId);
                 builder.AppendLine(" prepayId :" + prepayId);
                 //设置支付参数
                 RequestHandler paySignReqHandler = new RequestHandler(null);
@@ -325,6 +384,9 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             {
                 builder.AppendLine(string.Format("用戶[{1}] 支付订单【{0}】，Jsapi支付，请更改订单状态", sp_billno, openIdResult.openid));
             }
+
+            
+            ViewData["order"] = orderEntity;
             this._logger.Info(builder.ToString());
             //return Content(string.Format("用戶[{1}] 支付订单【{0}】，Jsapi支付，请更改订单状态", sp_billno, openIdResult.openid));
             return View();
@@ -697,21 +759,20 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             return Content(result);
         }
 
-        public ActionResult PayNotifyUrl()
+        public ActionResult PayNotifyUrl(string orderNo)
         {
             ResponseHandler resHandler = new ResponseHandler(null);
             
             string return_code = resHandler.GetParameter("return_code");
             string return_msg = resHandler.GetParameter("return_msg");
-
+              
             string res = null;
 
             resHandler.SetKey(TenPayV3Info.Key);
             //验证请求是否从微信发过来（安全）
             if (resHandler.IsTenpaySign())
             {
-                res = "success";
-
+                res = "success"; 
                 //正确的订单处理
             }
             else
@@ -726,9 +787,10 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             fileStream.Close();
 
             string xml = string.Format(@"<xml>
-   <return_code><![CDATA[{0}]]></return_code>
-   <return_msg><![CDATA[{1}]]></return_msg>
-</xml>", return_code, return_msg);
+               <return_code><![CDATA[{0}]]></return_code>
+               <return_msg><![CDATA[{1}]]></return_msg>
+            </xml>", return_code, return_msg);
+
             var builder = new StringBuilder();
             builder.AppendLine("==============PayNotifyUrl=================");
             builder.AppendLine("xml:" + xml);
@@ -738,6 +800,39 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             builder.AppendLine("==============PayNotifyUrl=================");
             this._logger.Info(builder.ToString());
             return Content(xml, "text/xml");
+            return RedirectToAction("ProductList");
+        }
+
+       
+        public ActionResult NotifyOrderSuccess(string orderNo)
+        {
+            var builder = new StringBuilder("==================NotifyOrderSuccess==================");
+            var user = Session["UserInfo"];
+            if (user == null)
+            {
+                builder.AppendLine("当前用户为空!");
+            }
+            else
+            {
+                var userInfo = user as OAuthUserInfo;
+                builder.AppendLine("user:" + userInfo.openid + ";nick name:" + userInfo.nickname);
+                builder.Append(";支付成功，进行订单更新:["+orderNo+"]");
+            } 
+            //var res = new JsonResult() {Data = new {Success = true, Message = "订单购买状态更新失败!"}};
+            //res.JsonRequestBehavior = JsonRequestBehavior.AllowGet; //允许使用GET方式获取，否则用GET获取是会报错。  
+            if (!string.IsNullOrEmpty(orderNo))
+            {
+                var command = new AirTicketCommand();
+                var result = command.PayMoneySuccess(orderNo);
+            }
+            this._logger.Info(builder.ToString());
+
+            return Redirect("OrderList");
+        }
+
+        public ActionResult OrderList()
+        {
+            return View();
         }
 
         #endregion

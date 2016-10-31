@@ -24,6 +24,7 @@ using Senparc.Weixin.Threads;
 using Castle.Facilities.Logging;
 using Castle.Windsor;
 using Senparc.Weixin.MP.Sample.App_Code;
+using Senparc.Weixin.MP.Sample.CommonService.Store;
 
 namespace Senparc.Weixin.MP.Sample
 {
@@ -48,7 +49,7 @@ namespace Senparc.Weixin.MP.Sample
         }
         protected void Application_Start()
         {
-
+            ConfigSettings.Initialize();//加載dapper數據庫組建
             //var iocContainer = new Castle.Windsor.WindsorContainer();
             container.AddFacility<LoggingFacility>(
                     f => f.UseLog4Net().WithConfig("log4net.config"));

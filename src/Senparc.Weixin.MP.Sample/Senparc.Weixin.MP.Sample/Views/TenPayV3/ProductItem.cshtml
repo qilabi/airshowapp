@@ -78,7 +78,7 @@
                         <form id="form1" name="form1" method="post" action="/TenPayV3/PayIt">
                             <input type="hidden" id="replies" name="replies" value="{{ticket.combineReplies()}}" />
                             <input type="hidden" id="realNames" name="realNames" value="{{ticket.combineRealNames()}}" />
-                            <input type="hidden" id="unitPrice" name="unitPrice" value="@Model.Price" />
+                            <input type="hidden" id="unitPrice" name="unitPrice" value="@Model.RealPrice" />
                             <input type="hidden" name="Quantity" value="{{ticket.qty}}" />
                             <input type="hidden" name="hc" value="@Model.GetHashCode()" />
                             <input type="hidden" name="productId" value="@Model.Id" />
@@ -90,7 +90,7 @@
                         <span></span>
                     </div>
                     <div class="submit">
-                        <input type="submit" ng-click="ticket.pay()" ng-disabled="btnsubmit" class="ordersubmit" />
+                        <input type="submit" ng-click="ticket.pay()" value="确认" class="ordersubmit" />
                         
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                 $scope.ticket = new Object();
                 $scope.client = new Object();
                 $scope.ticket.qty = 1;
-                $scope.ticket.unitPrice = @Model.Price;
+                $scope.ticket.unitPrice = @Model.RealPrice;
                 $scope.ticket.date = '2016-11-04';
                 $scope.client.phone = "";
                 $scope.ticket.id = @Model.Id;

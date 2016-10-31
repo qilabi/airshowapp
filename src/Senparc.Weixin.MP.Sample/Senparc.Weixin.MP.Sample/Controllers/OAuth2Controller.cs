@@ -105,7 +105,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
         /// <returns></returns>
         public ActionResult UserInfoCallback(string code, string state)
         {
-            
+            var builder = new StringBuilder();
             if (string.IsNullOrEmpty(code))
             {
                 return Content("您拒绝了授权！");
@@ -128,6 +128,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             #region 解決 Auth 出現 40028(Invalid code)錯誤
 
             this._logger.Info(string.Format("UserInfoCallback========state:{0}", state));
+            builder.AppendFormat("try begin=====");
             try
             {
                 //通过，用code换取access_token
@@ -142,6 +143,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                 {
                     //第一次请求
                     //LogUtility.Weixin.DebugFormat("第一次微信OAuth到达，code：{0}", code);
+                    builder.AppendFormat("first oauth step code:{0}", code);
                     lock (OAuthCodeCollectionLock)
                     {
                         OAuthCodeCollection[code] = null;
@@ -151,7 +153,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                 {
                     //第二次请求
                     //LogUtility.Weixin.DebugFormat("第二次微信OAuth到达，code：{0}", code);
-
+                    builder.AppendFormat("secound oauth code:{0} from OAuthCodeCollection object", code);
                     lock (OAuthCodeCollectionLock)
                     {
                         result = OAuthCodeCollection[code];
@@ -160,9 +162,16 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
                 try
                 {
+                  
                     try
                     {
-                        result = result ?? OAuthApi.GetAccessToken(appId, secret, code);
+                        if (result == null)
+                        {
+                            builder.Append(" result is null ; call OAuthApi.GetAccessToken(appId, secret, code)");
+                            result = OAuthApi.GetAccessToken(appId, secret, code);
+                        }
+                        
+                        //result = result == null ? OAuthApi.GetAccessToken(appId, secret, code) : result;
                     }
                     catch (Exception ex)
                     {
@@ -175,10 +184,12 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                         {
                             OAuthCodeCollection[code] = result;
                         }
+                        builder.Append(" OAuthCodeCollection add result ");
                     }
                 }
                 catch (ErrorJsonResultException ex)
                 {
+                    builder.Append("ex::" + ex.Message + " ;;;ex.JsonResult.errcode " + ex.JsonResult.errcode);
                     if (ex.JsonResult.errcode == ReturnCode.不合法的oauth_code)
                     {
                         //code已经被使用过
@@ -206,13 +217,19 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             //因为第一步选择的是OAuthScope.snsapi_userinfo，这里可以进一步获取用户详细信息
             try
             {
-                var userInfo = OAuthApi.GetUserInfo(result.access_token, result.openid);
+                if (result != null)
+                    builder.AppendFormat("result.access_token:{0};result.openid:{1}", result.access_token, result.openid);
+                else
+                    builder.AppendFormat("result.access_token:{0};result.openid:{1}", "NULL", "NULL");
+                builder.Append(" no call OAuthApi.GetUserInfo()");
+                this._logger.Info(builder.ToString());
+                
+                //var userInfo = OAuthApi.GetUserInfo(result.access_token, result.openid);
                 //var res = new JsonResult();
                 //res.Data = new {OpenId = userInfo.openid, NickName = userInfo.nickname};
                 //res.JsonRequestBehavior = JsonRequestBehavior.AllowGet; //允许使用GET方式获取，否则用GET获取是会报错。  
-
                 //dicSessionList.Add(token, userInfo);
-                Session["UserInfo"] = userInfo;
+                Session["UserInfo"] = new OAuthUserInfo() {openid = result.openid, nickname = ""};
                 //return View(userInfo);
                 //return res;
                 return RedirectToRoute(new
