@@ -362,6 +362,7 @@
     <Content Include="Scripts\senparc.menu.js" />
     <Content Include="Scripts\tongji.sdk.js" />
     <Content Include="Scripts\tongji.js" />
+    <Content Include="assets\orderList.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -427,7 +428,6 @@
     <Folder Include="App_Data\Document\Files\" />
     <Folder Include="App_Data\OpenTickets\" />
     <Folder Include="Controllers\AppStore\" />
-    <Folder Include="Views\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
