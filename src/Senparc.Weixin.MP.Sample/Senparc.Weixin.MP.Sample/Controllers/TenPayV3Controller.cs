@@ -36,6 +36,7 @@ using Senparc.Weixin.MP.Sample.CommonService.Data.Models;
 using Senparc.Weixin.MP.Sample.CommonService.Data.Application;
 using Senparc.Weixin.MP.Sample.CommonService.Domain.AirTicket;
 using Senparc.Weixin.MP.Sample.CommonService.Data;
+using Senparc.Weixin.MP.Sample.CommonService.Store;
 
 namespace Senparc.Weixin.MP.Sample.Controllers
 {
@@ -305,8 +306,8 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
              
             string sp_billno = stateData[2].ToString(); //订单
-            var commandService = new AirTicketCommand();
-            var orderEntity = commandService.GetOrder(sp_billno);
+            var airTicketStore = new AirTicketStore();
+            var orderEntity = airTicketStore.GetOrder(sp_billno);
             string date = DateTime.Now.ToString("yyyyMMdd");
              
             try
@@ -830,8 +831,17 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             return Redirect("OrderList");
         }
 
+        /// <summary>
+        /// 本地订单列表
+        /// </summary>
+        /// <returns></returns>
         public ActionResult OrderList()
         {
+            var openId = "oX1rFs-GrSV-R_GkGml4mP84fawI";
+            var store = new AirTicketStore();
+            var list = store.GetOrderWithOpenId(openId);
+            
+            ViewData["orders"] = list;
             return View();
         }
 
