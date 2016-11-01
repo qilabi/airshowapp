@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "登录成功...";
+    var backUrl = ViewData["backUrl"];
+    var backHref = HttpUtility.HtmlDecode(backUrl.ToString());
+}
+
+<!DOCTYPE html>
+<html ng-app="LoadingApp">
+<head>
+    <title>登录成功</title>
+    
+
+</head>
+<body class="" ng-controller="LoadingCtrl">
+    <div class="bar bar-header bar-positive item item-icon-right"> 
+        <h1 class="title">自动登录</h1>
+        <button class="button icon ion-refresh"></button>
+    </div>
+    <div style=""></div> 
+<script>
+    document.location.href = '@backHref';
+</script>
+<div style="display: none">
+
+</div>
+</body>
+</html>
