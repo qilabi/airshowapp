@@ -96,10 +96,18 @@ namespace Senparc.Weixin.MP.Sample.Controllers
         public ActionResult PayIt(PostTicketOrder order)
         {
             var user = Session["UserInfo"];
-            if (user == null) return RedirectToRoute(new {controller = "OAuth2", action = "Login"});
+            if (user == null)
+                return
+                    RedirectToRoute(
+                        new
+                        {
+                            controller = "OAuth2",
+                            action = "Login",
+                            backUrl = Url.Action("ProductItem", new {productId = order.productId, hc = order.hc})
+                        });
+            
             var userInfo = user as OAuthUserInfo;
-             
-
+            
             var products = ProductModel.GetFakeProductList();
             var product = products.FirstOrDefault(z => z.Id == order.productId);
 
@@ -133,11 +141,11 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             {
                 var line = new PostOrderLineDto()
                 {
-                    Name = nameArr[i],
+                    RealName = nameArr[i],
                     IdentityCardNo = identityNoArr[i],
                     UnitPrice = order.unitPrice
                 };
-                if (string.IsNullOrEmpty(line.Name) || string.IsNullOrEmpty(line.IdentityCardNo))
+                if (string.IsNullOrEmpty(line.RealName) || string.IsNullOrEmpty(line.IdentityCardNo))
                 {
                     identityInfoValid = false;
                     break;
@@ -837,12 +845,32 @@ namespace Senparc.Weixin.MP.Sample.Controllers
         /// <returns></returns>
         public ActionResult OrderList()
         {
-            var openId = "oX1rFs-GrSV-R_GkGml4mP84fawI";
+
+            var user = Session["UserInfo"];
+            if (user == null)
+                return
+                    RedirectToRoute(
+                        new {controller = "OAuth2", action = "Login", backUrl =  Url.Action("OrderList")});
+            var userInfo = user as OAuthUserInfo;
+
+            var openId = userInfo.openid;
+            //var openId = "oX1rFsx2B-kZkSAhBqtcft3TkMOU";
+            //var openId = "oX1rFsx2B-";
             var store = new AirTicketStore();
             var list = store.GetOrderWithOpenId(openId);
             
             ViewData["orders"] = list;
             return View();
+        }
+
+        public ActionResult OrderDetailLines(string orderNo)
+        {
+            var res = new JsonResult() {Data = new {Success = false, Message = "获取订单详细失败!"}};
+            var store = new AirTicketStore();
+            var orderEntity = store.GetOrder(orderNo);
+            res.Data = new {Success = true, Message = "获取成功!", List = orderEntity.Lines};
+            res.JsonRequestBehavior = JsonRequestBehavior.AllowGet; //允许使用GET方式获取，否则用GET获取是会报错。  
+            return res;
         }
 
         #endregion
@@ -1155,6 +1183,16 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
         public ActionResult ProductItem(int productId, int hc)
         {
+            var user = Session["UserInfo"];
+            if (user == null)
+                return
+                    RedirectToRoute(
+                        new
+                        {
+                            controller = "OAuth2",
+                            action = "Login",
+                            backUrl = Url.Action("ProductItem", new {productId = productId, hc = hc})
+                        });
             var products = ProductModel.GetFakeProductList();
             var product = products.FirstOrDefault(z => z.Id == productId);
             if (product == null || product.GetHashCode() != hc)

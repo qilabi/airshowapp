@@ -107,6 +107,25 @@
     <script>
     $("#date-input").calendar({
         value: ['2016-11-04'],
+        onChange:function(p, values, displayValues) {
+            if (displayValues.length > 0) {
+                if (displayValues[0] === '2016-11-05') {
+                    alert('当天的票已全部售完，请重新选择!');
+                    displayValues = new Array();
+                    $("#date-input").val('');
+                    return false;
+                }
+            } 
+        },
+        onClose:function(p) {
+            try {
+                if ('2016-11-05' === p.input.val()) {
+                    p.input.val('');
+                }
+            } catch (e) {
+
+            } 
+        },
         minDate: '2016-11-03',
         maxDate:'2016-11-06'
     });
@@ -210,6 +229,10 @@
         var phone = $scope.client.phone;
         if (!phone || phone.length != 11) {
             alert('您输入的手机号码有误!');
+            return;
+        }
+        if ($scope.ticket.date === '2016-11-05') {
+            alert('当天票已全部售完!');
             return;
         }
         var quantity = $scope.ticket.qty;

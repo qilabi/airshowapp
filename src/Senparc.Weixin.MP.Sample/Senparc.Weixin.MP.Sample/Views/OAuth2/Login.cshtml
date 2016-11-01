@@ -1,5 +1,75 @@
 ﻿@{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "自动登录";
+    var backUrl = ViewData["backUrl"];
+    var backHref = HttpUtility.HtmlDecode(backUrl.ToString());
 }
 
-<h2>Login</h2>
+<!DOCTYPE html>
+<html ng-app="LoadingApp">
+<head>
+    <title>自动登录</title>
+    <link href="http://cdn.bootcss.com/ionic/1.3.2/css/ionic.min.css" rel="stylesheet">
+    <link href="~/assets/orderList.css" rel="stylesheet" />
+
+</head>
+<body class="" ng-controller="LoadingCtrl">
+    <div class="bar bar-header bar-positive item item-icon-right">
+        <h1 class="title">自动登录...</h1>
+        <button class="button icon ion-refresh"></button>
+    </div>
+    <div style=""></div> 
+    <script src="//cdn.bootcss.com/ionic/1.3.2/js/ionic.bundle.min.js"></script>
+    <script>
+        angular.module('LoadingApp', ['ionic'])
+            .controller('LoadingCtrl', function($scope, $timeout, $ionicLoading) {
+
+                // Setup the loader
+                $ionicLoading.show({
+                    content: '自动登录中....',
+                    animation: 'fade-in',
+                    showBackdrop: true,
+                    maxWidth: 200,
+                    showDelay: 0
+                });
+
+                // Set a timeout to clear loader, however you would actually call the $ionicLoading.hide(); method whenever everything is ready or loaded.
+                //$timeout(function () {
+                //    $ionicLoading.hide();
+                    
+                //}, 2000);
+                $scope.validateLoginState = function($scope, $timeout, $ionicLoading) {
+                    @*$.ajax({
+                        url: '@Url.Action("ValidateLoginState")',
+                        async: false,
+                        dataType: 'json',
+                        success: function (resp) {
+                            if (!resp.IsLogin) {
+                                $timeout(function () {
+                                    $scope.validateLoginState($scope, $timeout, $ionicLoading);
+                                }, 4000);
+                            } else {
+                                $ionicLoading.hide();
+                                document.location.href = '@backUrl';
+                            }
+                        }
+                    });*@
+                     
+                }
+
+                @*$.ajax({
+                    url: '@Url.Action("AutoLogin")',
+                    async: true,
+                    dataType: 'json',
+                    success: function (resp) {
+
+                    }
+                });*@
+
+               // $scope.validateLoginState($scope, $timeout, $ionicLoading);
+            });
+    </script>
+    <div style="display: none">
+        <iframe src="@Url.Action("AutoLogin", new { backUrl = backHref })"></iframe>
+    </div>
+</body>
+</html>

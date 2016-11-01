@@ -76,8 +76,8 @@
                         </div>
                         <a href="@Url.Action("ProductItem", "TenPayV3", new {productId = item.Id, hc = item.GetHashCode()})">
                             <div class="ticket-right" data-ek="bookingBtn" data-tlink="" data-tid="0">
-                                <div class="ticket-price">@item.RealPrice.ToString("c")</div>
-                                <div class="ticket-origin-price">原价:@item.RealPrice.ToString("c") </div>
+                                <div class="ticket-price">@item.RealPrice.ToString("#.##")</div>
+                                <div class="ticket-origin-price">@item.RealPrice.ToString("#.##") </div>
                                 <div class="ticket-book">预订</div>
                                 <div class="ticket-pay-type">在线支付</div>
                             </div>

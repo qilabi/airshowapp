@@ -39,13 +39,13 @@ namespace Senparc.Weixin.MP.Sample.Tests.CommonService.Domain
                 {
                     new PostOrderLineDto()
                     {
-                        Name = "陈从睿",
+                        RealName = "陈从睿",
                         IdentityCardNo = "360735199012151414",
                         UnitPrice = 550,
                     },
                     new PostOrderLineDto()
                     {
-                        Name = "黃杰",
+                        RealName = "黃杰",
                         IdentityCardNo = "360735198911121401",
                         UnitPrice = 550
                     }

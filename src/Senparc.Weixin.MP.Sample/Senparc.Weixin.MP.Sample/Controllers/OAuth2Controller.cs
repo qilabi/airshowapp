@@ -41,9 +41,23 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
         private static Dictionary<Guid, OAuthUserInfo> dicSessionList = new Dictionary<Guid, OAuthUserInfo>();
 
-        public ActionResult Login()
+        public ActionResult Login(string backUrl = "")
         {
-            var builder = new StringBuilder("Login======");
+            if (string.IsNullOrEmpty(backUrl))
+            {
+                backUrl = Url.Action("ProductList", "TenPayV3");
+            }
+            ViewData["backUrl"] = backUrl;
+            return View();
+        }
+
+        public ActionResult AutoLogin(string backUrl = "")
+        {
+            if (string.IsNullOrEmpty(backUrl))
+            {
+                backUrl = Url.Action("ProductList", "TenPayV3");
+            }
+            var builder = new StringBuilder("============Login======");
             var token = Guid.Empty;
 
             if (Session["userToken"] == null)
@@ -68,10 +82,23 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
             builder.AppendFormat(" tokenCode :{0}", token.GetHashCode());
             _logger.Info(builder.ToString());
+            Session["backUrl"] = backUrl;
             return RedirectToAction("Index",
-                new {url = "http://www.soyotu.com/OAuth2/UserInfoCallback", tokenHc = token.GetHashCode()});
+                new { url = "http://www.soyotu.com/OAuth2/UserInfoCallback", tokenHc = token.GetHashCode() });
+            
         }
 
+        public ActionResult ValidateLoginState()
+        {
+            var res = new JsonResult() {Data = new {IsLogin = false}};
+            var user = Session["UserInfo"];
+            if (user != null)
+            {
+                res.Data = new {IsLogin = true};
+            }
+            res.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+            return res;
+        }
 
         public ActionResult Index(string url, string tokenHc)
         {
@@ -110,7 +137,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             {
                 return Content("您拒绝了授权！");
             }
-            var token = (Guid)Session["userToken"];
+            var token = (Guid) Session["userToken"];
             if (token.GetHashCode().ToString() != state)
             {
                 return Content("验证失败！请从正规途径进入！");
@@ -122,7 +149,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             //    //实际上可以存任何想传递的数据，比如用户ID，并且需要结合例如下面的Session["OAuthAccessToken"]进行验证
             //    return Content("验证失败！请从正规途径进入！");
             //}
-             
+
             OAuthAccessTokenResult result = null;
 
             #region 解決 Auth 出現 40028(Invalid code)錯誤
@@ -162,7 +189,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
 
                 try
                 {
-                  
+
                     try
                     {
                         if (result == null)
@@ -170,7 +197,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                             builder.Append(" result is null ; call OAuthApi.GetAccessToken(appId, secret, code)");
                             result = OAuthApi.GetAccessToken(appId, secret, code);
                         }
-                        
+
                         //result = result == null ? OAuthApi.GetAccessToken(appId, secret, code) : result;
                     }
                     catch (Exception ex)
@@ -208,7 +235,7 @@ namespace Senparc.Weixin.MP.Sample.Controllers
             #endregion
 
             this._logger.Info(string.Format("After 解決 Auth 出現 40028(Invalid code)錯誤"));
-            
+
             //下面2个数据也可以自己封装成一个类，储存在数据库中（建议结合缓存）
             //如果可以确保安全，可以将access_token存入用户的cookie中，每一个人的access_token是不一样的
             Session["OAuthAccessTokenStartTime"] = DateTime.Now;
@@ -223,20 +250,28 @@ namespace Senparc.Weixin.MP.Sample.Controllers
                     builder.AppendFormat("result.access_token:{0};result.openid:{1}", "NULL", "NULL");
                 builder.Append(" no call OAuthApi.GetUserInfo()");
                 this._logger.Info(builder.ToString());
-                
+
                 //var userInfo = OAuthApi.GetUserInfo(result.access_token, result.openid);
-                //var res = new JsonResult();
-                //res.Data = new {OpenId = userInfo.openid, NickName = userInfo.nickname};
-                //res.JsonRequestBehavior = JsonRequestBehavior.AllowGet; //允许使用GET方式获取，否则用GET获取是会报错。  
+                var res = new JsonResult();
+                res.Data = new {OpenId = result.openid,};
+                //res.JsonRequestBehavior = JsonRequestBehavior.AllowGet; //允许使用GET方式获取，否则用GET获取是会报错。 
+                //return res;
                 //dicSessionList.Add(token, userInfo);
                 Session["UserInfo"] = new OAuthUserInfo() {openid = result.openid, nickname = ""};
-                //return View(userInfo);
-                //return res;
-                return RedirectToRoute(new
+                var backUrl = Session["backUrl"];
+                if (backUrl == null || string.IsNullOrEmpty(backUrl.ToString()))
                 {
-                    controller = "TenPayV3",
-                    action="ProductList"
-                });
+                    backUrl = Url.Action("ProductList", "TenPayV3");
+                }
+                ViewData["backUrl"] = backUrl;
+                return Redirect(backUrl.ToString());
+                //return View();
+
+                //return RedirectToRoute(new
+                //{
+                //    controller = "TenPayV3",
+                //    action="ProductList"
+                //});
             }
             catch (ErrorJsonResultException ex)
             {

@@ -33,7 +33,7 @@
     // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
         //公众号支付
-        $('a#getBrandWCPayRequest').click(function (e) {
+        $('div.submitBotton').click(function (e) {
             WeixinJSBridge.invoke('getBrandWCPayRequest', {
                 "appId": "@ViewData["appId"]", //公众号名称，由商户传入
                 "timeStamp": "@ViewData["timeStamp"]", //时间戳
@@ -101,7 +101,7 @@
         <!--头部 End-->
         <section class="content">
             <div class="pay_Amount pay_top clearfix">
-                <span>支付金额</span><span>￥@order.Amount.ToString("c") </span>
+                <span>支付金额</span><span>￥@order.Amount.ToString() </span>
             </div>
             <p class="pay_Channel lineBlock">@order.Title</p>
             <div class="pay_Amount clearfix">

@@ -40,7 +40,7 @@ namespace Senparc.Weixin.MP.Sample.CommonService.Domain.AirTicket
                                 {
                                     OrderId = orderId,
                                     OrderNo = dto.OrderNo,
-                                    RealName = line.Name,
+                                    RealName = line.RealName,
                                     IdentityCardNo = line.IdentityCardNo,
                                     UnitPrice = line.UnitPrice
                                 }, trans);

@@ -1,16 +1,18 @@
-﻿@model Senparc.Weixin.MP.AdvancedAPIs.OAuth.OAuthUserInfo
+﻿@*@model Senparc.Weixin.MP.AdvancedAPIs.OAuth.OAuthUserInfo*@
 
 @{
     Layout = null;
+    var backUrl = ViewData["backUrl"];
+    var backHref = HttpUtility.HtmlDecode(backUrl.ToString());
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>OAuth2.0授权测试授权成功</title>
+    <title>自动登录中....</title>
 </head>
 <body>
-    <h2>OAuth2.0授权测试授权成功！</h2>
+@*<h2>OAuth2.0授权测试授权成功！</h2>
     @if (ViewData.ContainsKey("ByBase"))
     {
         <p><strong>您看到的这个页面来自于snsapi_base授权，因为您已关注本微信，所以才能查询到详细用户信息，否则只能进行常规的授权。</strong></p>
@@ -33,6 +35,9 @@
     <p>
         头像：<br />
         <img src="@Model.headimgurl"/>（直接调用可能看不到，需要抓取）
-    </p>
+    </p>*@
+    
+<script>document.location.href = '@backHref';
+    </script>
 </body>
 </html>

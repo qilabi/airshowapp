@@ -423,6 +423,7 @@
     <Content Include="Views\Shared\_Loading.cshtml" />
     <Content Include="Views\Shared\_BottomNav.cshtml" />
     <Content Include="Views\TenPayV3\OrderList.cshtml" />
+    <Content Include="Views\OAuth2\AutoLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Document\Files\" />

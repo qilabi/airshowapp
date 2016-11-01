@@ -13,16 +13,30 @@ namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
             Lines = new List<PostOrderLineDto>();
         }
         public string Title { get; set; }
+
         public string OrderNo { get; set; }
         public string OpenId { get; set; }
         public string Telephone { get; set; }
         public DateTime Dtime { get; set; }
-        
+
+
+        private int _ticketCount = 0;
 
         /// <summary>
         /// 票數量
         /// </summary>
-        public int TicketCount{get { return Lines.Count; }}
+        public int TicketCount
+        {
+            get
+            {
+                if (_ticketCount == 0)
+                    return Lines.Count;
+                else
+                    return _ticketCount;
+            }
+            set { _ticketCount = value; }
+        }
+
         /// <summary>
         /// 總價
         /// </summary>
@@ -33,7 +47,7 @@ namespace Senparc.Weixin.MP.Sample.CommonService.Data.Models
 
     public class PostOrderLineDto
     { 
-        public string Name { get; set; }
+        public string RealName { get; set; }
         public string IdentityCardNo { get; set; }
         /// <summary>
         /// 單價
