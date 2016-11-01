@@ -1,5 +1,40 @@
-﻿@{
+﻿ @{
     ViewBag.Title = "OrderList";
+    
 }
 
-<h2>功能暂未开放，请联系管理员（Ryan）</h2>
+
+    <!DOCTYPE HTML>
+    <html>
+    <head>
+        <title>订单列表</title>
+        <link href="//cdn.bootcss.com/ionic/1.3.2/css/ionic.min.css" rel="stylesheet">
+        <link href="~/assets/orderList.css" rel="stylesheet" />
+
+    </head>
+    <body class="stable-bg">
+    <div class="bar bar-header bar-positive item item-icon-right">
+        <i class="icon ion-location"></i>
+        <h1 class="title">订单列表</h1>
+        <button class="button icon ion-refresh"></button>
+    </div>
+        <div id="main">
+            <div class="orders scroll-content has-header">
+                <div class="list clearfix">
+                    @foreach (var order in (IEnumerable<Senparc.Weixin.MP.Sample.CommonService.Domain.Models.AirOrder>)ViewData["orders"])
+                    {
+                        <div class="item item-icon-right clearfix">
+                            <div class="title-lips">@order.Title（11.4-11.6）</div>
+                            <div class="item-detail">数量：@order.TicketCount 张</div>
+                            <div class="item-detail">电话号码：@order.Telephone</div>
+
+                            <span class="status">处理中<br><em class="money">¥@order.Amount</em></span>
+                            <i class="icon ion-ios-arrow-right"></i>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+

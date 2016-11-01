@@ -131,6 +131,7 @@
     <Compile Include="OpenTicket\OpenTicketHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MessageHandlers\CustomThirdPartyMessageHandlers\CustomThirdPartyMessageHandler.cs" />
+    <Compile Include="Store\AirTicketStore.cs" />
     <Compile Include="Store\BaseQueryService.cs" />
     <Compile Include="Store\ConfigSettings.cs" />
     <Compile Include="Store\ThirdParty\Dapper\SqlMapperExtensions.cs" />
