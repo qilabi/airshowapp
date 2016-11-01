@@ -421,11 +421,13 @@
     <Content Include="Views\TenPayV3\PaymentStatus.cshtml" />
     <Content Include="Views\Shared\_Loading.cshtml" />
     <Content Include="Views\Shared\_BottomNav.cshtml" />
+    <Content Include="Views\TenPayV3\OrderList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Document\Files\" />
     <Folder Include="App_Data\OpenTickets\" />
     <Folder Include="Controllers\AppStore\" />
+    <Folder Include="Views\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

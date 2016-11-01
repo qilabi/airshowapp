@@ -28,6 +28,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
 {
     public static class OAuthApi
     {
+       
         #region 同步请求
          /*此接口不提供异步方法*/
         /// <summary>

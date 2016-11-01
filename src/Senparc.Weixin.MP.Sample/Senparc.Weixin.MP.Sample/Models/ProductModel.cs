@@ -38,7 +38,8 @@ namespace Senparc.Weixin.MP.Sample.Models
             {
                 new ProductModel(1,"成人票(电子票)",(decimal)500.00,(decimal)490.00),
                 new ProductModel(2,"老人儿童学生(电子票)",(decimal)300.00,(decimal)270.00)
-      
+                //new ProductModel(1,"成人票(电子票)",(decimal)500.00,(decimal)0.2),
+                //new ProductModel(2,"老人儿童学生(电子票)",(decimal)300.00,(decimal)0.1)
             };
             ProductList = ProductList ?? list;
 
