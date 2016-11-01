@@ -15,50 +15,9 @@
     <script language="javascript" src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
     @*<script language="javascript" src="https://raw.githubusercontent.com/tuupola/jquery_lazyload/master/jquery.lazyload.min.js" type="text/javascript"></script>*@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <style type="text/css">
-        body {
-            margin: 0;
-            padding: 0;
-            background: #eae9e6;
-        }
-
-        body, p, table, td, th {
-            font-size: 14px;
-            font-family: helvetica,Arial,Tahoma;
-        }
-
-        h1 {
-            font-family: Baskerville,HelveticaNeue-Bold,helvetica,Arial,Tahoma;
-        }
-
-        a {
-            text-decoration: none;
-            color: #385487;
-        }
-
-        .product {
-            font-size: 200%;
-            color: #a5a5a5;
-        }
-
-        .title h1 {
-            font-size: 22px;
-            font-weight: bold;
-            padding: 0;
-            margin: 0;
-            line-height: 1.2;
-            color: #1f1f1f;
-        }
-
-        .title p {
-            color: #aaa;
-            font-size: 12px;
-            margin: 5px 0 0;
-            padding: 0;
-            font-weight: bold;
-        }
-
-    </style>
+    <link rel="stylesheet" href="/assets/styles/public.css">
+    <link rel="stylesheet" href="/assets/styles/payResult.css">
+    <link rel="stylesheet" href="/assets/styles/sm-extend.min.css">
     <script language="javascript" type="text/javascript">
     function auto_remove(img) {
         div = img.parentNode.parentNode; div.parentNode.removeChild(div);
@@ -133,19 +92,46 @@
     </script>
 </head>
 <body >
-     
-<div class="WCPay row">
-    <a id="getBrandWCPayRequest" href="javascript:void(0);">
-       
-            <div class="product col-md-6">
-                订单号码：@order.OrderNo<br />
-                您已选中产品：@order.Title<br/>
-                总额：@order.Amount.ToString("c")
+    <div class="page page-current">
+        <!--头部 Start-->
+        <header class="bar bar-nav">
+            <a class="button button-link button-nav pull-left" href="#" data-transition="slide-out"><span class="icon icon-left"></span></a><a class="pull-right close">关闭</a><a class="pull-right icon icon-refresh"></a>
+            <h1 class="title">订单支付</h1>
+        </header>
+        <!--头部 End-->
+        <section class="content">
+            <div class="pay_Amount pay_top clearfix">
+                <span>支付金额</span><span>￥@order.Amount.ToString("c") </span>
             </div>
-       
-        <h1 class="title">点击购买</h1>
-    </a>
-  
-</div>
+            <p class="pay_Channel lineBlock">@order.Title</p>
+            <div class="pay_Amount clearfix">
+
+
+                <div class="pay-group">
+
+                    <dl class="pay-list">
+                        <dt class="p-name">订单编号：@order.OrderNo</dt>
+                    </dl>
+                </div>
+
+                @*<div class="pay-group">
+                    <dl class="pay-list">
+                        <dt class="p-name"><strong>陈小宝</strong>231321654321544321</dt>
+                    </dl>
+                </div>
+
+                <div class="pay-group">
+                    <dl class="pay-list">
+                        <dt class="p-name"><strong>宋小宝</strong>231321654321544321</dt>
+                    </dl>
+                </div>*@
+            </div>
+            <div class="pay-agreement">
+
+            </div>
+            <div class="submitBotton"><a href="javascript:;">微信支付</a></div>
+        </section>
+    </div>
+    
 </body>
 </html>

@@ -45,7 +45,7 @@ dl.pay-list dt {float: left;text-align:left;width:90%;}
 .p-name00{color: #333!important;}
 .p-name00 span{font-size:.75rem;}
 .p-name00 em{font-size:.6rem;color:#969696;}
-.p-name strong{display:inline-block;width:2rem; text-align:center;margin-right:.56rem;border:1px solid #e8e8e8;padding:.3rem .2rem;background:#f3f3f3;border-radius:.2rem;vertical-align:middle;}
+.p-name strong{display:inline-block;width:3.5rem; text-align:center;margin-right:.56rem;border:1px solid #e8e8e8;padding:.3rem .2rem;background:#f3f3f3;border-radius:.2rem;vertical-align:middle;}
 .p-name strong img{width:1rem;display:inline-block;}
 .pay-agreement{font-size:.7rem;padding:.6rem;}
 .pay-agreement input{width:.7rem;height:.7rem;vertical-align:middle;margin-top:-.1rem;}
